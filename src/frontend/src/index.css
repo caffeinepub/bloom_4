@@ -1,0 +1,164 @@
+@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600;1,700&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Warm cream luxury palette — OKLCH L C H */
+    --background: 96.5 0.015 80;
+    --foreground: 30 0.06 50;
+    --card: 95 0.012 80;
+    --card-foreground: 30 0.06 50;
+    --popover: 96 0.012 80;
+    --popover-foreground: 30 0.06 50;
+
+    /* Blush primary */
+    --primary: 72 0.08 15;
+    --primary-foreground: 98 0.005 80;
+
+    /* Soft warm secondary */
+    --secondary: 93 0.018 80;
+    --secondary-foreground: 25 0.025 60;
+
+    /* Muted warm gray */
+    --muted: 92 0.014 78;
+    --muted-foreground: 55 0.025 65;
+
+    /* Golden tan accent */
+    --accent: 72 0.065 65;
+    --accent-foreground: 30 0.06 50;
+
+    --destructive: 55 0.18 25;
+    --destructive-foreground: 98 0.005 80;
+
+    --border: 85 0.022 78;
+    --input: 85 0.022 78;
+    --ring: 72 0.065 65;
+
+    --radius: 0.75rem;
+
+    /* Chart tokens */
+    --chart-1: 72 0.08 15;
+    --chart-2: 72 0.065 65;
+    --chart-3: 80 0.04 80;
+    --chart-4: 65 0.06 30;
+    --chart-5: 85 0.03 90;
+
+    /* Sidebar */
+    --sidebar: 94 0.014 78;
+    --sidebar-foreground: 30 0.06 50;
+    --sidebar-primary: 72 0.08 15;
+    --sidebar-primary-foreground: 98 0.005 80;
+    --sidebar-accent: 90 0.018 78;
+    --sidebar-accent-foreground: 30 0.06 50;
+    --sidebar-border: 85 0.022 78;
+    --sidebar-ring: 72 0.065 65;
+  }
+
+  * {
+    @apply border-border;
+    box-sizing: border-box;
+  }
+
+  html,
+  body {
+    background: radial-gradient(ellipse at 30% 20%, #fdf0e8 0%, #f7d8bf 100%);
+    background-attachment: fixed;
+    min-height: 100vh;
+  }
+
+  body {
+    @apply text-foreground antialiased;
+    font-family: "DM Sans", "Inter", sans-serif;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: "Cormorant Garamond", Georgia, serif;
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes float-delayed {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes diamond-reveal {
+  from {
+    opacity: 0;
+    transform: scaleX(0.4);
+  }
+  to {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-float-delayed {
+  animation: float-delayed 3.5s ease-in-out infinite;
+}
+
+.animate-float-slow {
+  animation: float 4.5s ease-in-out infinite;
+}
+
+.animate-fade-up {
+  animation: fade-up 0.6s ease-out both;
+}
+
+.animate-diamond-reveal {
+  animation: diamond-reveal 0.8s ease-out both;
+}
+
+.card-stagger-1 {
+  animation-delay: 0.05s;
+}
+.card-stagger-2 {
+  animation-delay: 0.10s;
+}
+.card-stagger-3 {
+  animation-delay: 0.15s;
+}
+.card-stagger-4 {
+  animation-delay: 0.20s;
+}
+.card-stagger-5 {
+  animation-delay: 0.25s;
+}
+.card-stagger-6 {
+  animation-delay: 0.30s;
+}
