@@ -20,7 +20,6 @@ export async function renderBouquetWithCard(
   // Load bouquet image
   await new Promise<void>((resolve, reject) => {
     const img = new Image();
-    img.crossOrigin = "anonymous";
     img.onload = () => {
       ctx.drawImage(img, 0, 0, 800, 1000);
       resolve();

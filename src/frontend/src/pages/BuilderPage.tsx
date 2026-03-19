@@ -234,37 +234,61 @@ function Hero() {
   return (
     <section className="pt-16 pb-12 text-center">
       <div className="mx-auto max-w-3xl px-6">
-        {/* Floral icons row */}
-        <div className="mb-8 flex items-center justify-center gap-4">
+        {/* Floral icons row — 7 items, smooth organic float */}
+        <div className="mb-8 flex items-center justify-center gap-5">
           <span
-            className="text-2xl animate-float"
+            className="text-2xl animate-float-gentle"
             style={{ animationDelay: "0s" }}
           >
             🌸
           </span>
           <span
-            className="text-bloom-gold/60 text-sm animate-float-delayed"
-            style={{ animationDelay: "0.3s" }}
+            className="text-bloom-gold/50 text-xs animate-float-delayed"
+            style={{ animationDelay: "0.4s" }}
           >
             ✦
           </span>
           <span
             className="text-2xl animate-float"
-            style={{ animationDelay: "0.6s" }}
+            style={{ animationDelay: "0.8s" }}
           >
-            🌷
+            🌹
           </span>
           <span
-            className="text-bloom-gold/60 text-sm animate-float-delayed"
-            style={{ animationDelay: "0.9s" }}
+            className="text-bloom-gold/50 text-xs animate-float-delayed"
+            style={{ animationDelay: "1.2s" }}
           >
             ✦
           </span>
           <span
             className="text-2xl animate-float-slow"
-            style={{ animationDelay: "0.4s" }}
+            style={{ animationDelay: "0.3s" }}
           >
             🌺
+          </span>
+          <span
+            className="text-bloom-gold/50 text-xs animate-float-delayed"
+            style={{ animationDelay: "1.6s" }}
+          >
+            ✦
+          </span>
+          <span
+            className="text-2xl animate-float-sway"
+            style={{ animationDelay: "0.6s" }}
+          >
+            🌷
+          </span>
+          <span
+            className="text-bloom-gold/50 text-xs animate-float-delayed"
+            style={{ animationDelay: "2.0s" }}
+          >
+            ✦
+          </span>
+          <span
+            className="text-2xl animate-float-gentle"
+            style={{ animationDelay: "1.0s" }}
+          >
+            🪷
           </span>
         </div>
 
@@ -396,17 +420,45 @@ export default function BuilderPage() {
     setIsGenerating(true);
     try {
       const matched = matchBouquet(selectedFlowers, selectedGreenery);
-      const [id, dataUrl] = await Promise.all([
+
+      // Run canvas render and backend save independently
+      const [canvasResult, backendResult] = await Promise.allSettled([
+        renderBouquetWithCard(matched.imageUrl, message.trim()),
         createBouquet.mutateAsync({
           flowers: selectedFlowers,
           greenery: selectedGreenery,
           message: message.trim(),
           imageKey: matched.key,
         }),
-        renderBouquetWithCard(matched.imageUrl, message.trim()),
       ]);
-      setMergedImageUrl(dataUrl);
-      setShareId(id);
+
+      const canvasFailed = canvasResult.status === "rejected";
+      const backendFailed = backendResult.status === "rejected";
+
+      // Only show error toast if both failed completely
+      if (canvasFailed && backendFailed) {
+        console.error("Canvas error:", canvasResult.reason);
+        console.error("Backend error:", backendResult.reason);
+        toast.error("Something went wrong. Please try again.");
+        return;
+      }
+
+      // Use canvas result, fall back to matched image URL
+      const finalImageUrl = canvasFailed
+        ? matched.imageUrl
+        : canvasResult.value;
+
+      // Use backend id if available, otherwise null (no share link)
+      const finalShareId = backendFailed
+        ? null
+        : (backendResult.value as string);
+
+      if (canvasFailed) {
+        console.warn("Canvas render failed, showing original bouquet image.");
+      }
+
+      setMergedImageUrl(finalImageUrl);
+      setShareId(finalShareId);
     } catch (err) {
       console.error(err);
       toast.error("Something went wrong. Please try again.");
@@ -435,7 +487,11 @@ export default function BuilderPage() {
   };
 
   const handleShare = async () => {
-    if (!mergedImageUrl || !shareId) return;
+    if (!mergedImageUrl) return;
+    if (!shareId) {
+      toast.error("Share link unavailable. You can still download the image.");
+      return;
+    }
     const url = `${window.location.origin}/view/${shareId}`;
     if (navigator.share) {
       try {
@@ -494,11 +550,30 @@ export default function BuilderPage() {
                 </p>
               </div>
 
-              <div className="w-full max-w-md overflow-hidden rounded-2xl shadow-hero">
+              {/* Bouquet preview — portrait, no stretch */}
+              <div
+                style={{
+                  position: "relative",
+                  width: "100%",
+                  maxWidth: "420px",
+                  margin: "0 auto",
+                  borderRadius: "16px",
+                  overflow: "hidden",
+                  boxShadow: "0 20px 40px rgba(0,0,0,0.08)",
+                }}
+              >
+                <div style={{ paddingTop: "133.33%" }} />
                 <img
                   src={mergedImageUrl}
                   alt="Your custom bouquet with message card"
-                  className="w-full object-cover"
+                  style={{
+                    position: "absolute",
+                    inset: 0,
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                    display: "block",
+                  }}
                 />
               </div>
 
@@ -511,14 +586,16 @@ export default function BuilderPage() {
                 >
                   <Download className="h-4 w-4" /> Download Bouquet
                 </a>
-                <Button
-                  variant="outline"
-                  className="rounded-full border-bloom-gold/50 px-8 py-3 font-sans text-sm font-semibold text-bloom-gold hover:bg-bloom-gold/10"
-                  onClick={handleShare}
-                  data-ocid="result.secondary_button"
-                >
-                  <Link2 className="mr-2 h-4 w-4" /> Copy Share Link
-                </Button>
+                {shareId && (
+                  <Button
+                    variant="outline"
+                    className="rounded-full border-bloom-gold/50 px-8 py-3 font-sans text-sm font-semibold text-bloom-gold hover:bg-bloom-gold/10"
+                    onClick={handleShare}
+                    data-ocid="result.secondary_button"
+                  >
+                    <Link2 className="mr-2 h-4 w-4" /> Copy Share Link
+                  </Button>
+                )}
                 <Button
                   variant="ghost"
                   className="rounded-full px-8 py-3 font-sans text-sm font-semibold text-bloom-subtle hover:text-bloom-heading"
@@ -560,7 +637,8 @@ export default function BuilderPage() {
                     >
                       — {group.label} —
                     </p>
-                    <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4">
+                    {/* Constrain flower grid to same width as greenery (max-w-2xl) for uniform card sizes */}
+                    <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 max-w-2xl mx-auto">
                       {group.flowers.map((flower, idx) => (
                         <FlowerCard
                           key={flower}

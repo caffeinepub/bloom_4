@@ -126,11 +126,30 @@ export default function ViewPage() {
               <DiamondDivider />
             </div>
 
-            <div className="w-full overflow-hidden rounded-2xl shadow-hero">
+            {/* Bouquet preview — portrait, no stretch */}
+            <div
+              style={{
+                position: "relative",
+                width: "100%",
+                maxWidth: "420px",
+                margin: "0 auto",
+                borderRadius: "16px",
+                overflow: "hidden",
+                boxShadow: "0 20px 40px rgba(0,0,0,0.08)",
+              }}
+            >
+              <div style={{ paddingTop: "133.33%" }} />
               <img
                 src={mergedImageUrl}
                 alt="Custom bouquet with personal message card"
-                className="w-full object-cover"
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                  display: "block",
+                }}
               />
             </div>
 
