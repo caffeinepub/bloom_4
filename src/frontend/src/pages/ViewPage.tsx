@@ -2,8 +2,10 @@ import { Link, useParams } from "@tanstack/react-router";
 import { ArrowLeft, Download, Loader2 } from "lucide-react";
 import { motion } from "motion/react";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 import { matchBouquet } from "../bouquetLibrary";
 import { renderBouquetWithCard } from "../canvasUtils";
+import Footer from "../components/Footer";
 import { useGetBouquet } from "../hooks/useQueries";
 
 function DiamondDivider() {
@@ -22,6 +24,10 @@ export default function ViewPage() {
   const [mergedImageUrl, setMergedImageUrl] = useState<string | null>(null);
   const [isRendering, setIsRendering] = useState(false);
 
+  // Read ?to= query param
+  const recipientName =
+    new URLSearchParams(window.location.search).get("to") ?? "";
+
   useEffect(() => {
     if (!bouquet) return;
     setIsRendering(true);
@@ -32,10 +38,49 @@ export default function ViewPage() {
       .finally(() => setIsRendering(false));
   }, [bouquet]);
 
+  // Open Graph meta tags
+  useEffect(() => {
+    if (!bouquet) return;
+    const title = recipientName
+      ? `A Bouquet for ${recipientName} — Bloom`
+      : "A Bouquet for You — Bloom";
+    document.title = title;
+
+    const setMeta = (property: string, content: string) => {
+      let el = document.querySelector(
+        `meta[property="${property}"]`,
+      ) as HTMLMetaElement | null;
+      if (!el) {
+        el = document.createElement("meta");
+        el.setAttribute("property", property);
+        document.head.appendChild(el);
+      }
+      el.content = content;
+    };
+
+    setMeta("og:title", title);
+    setMeta(
+      "og:description",
+      bouquet.message || "I created this bouquet for you 💐",
+    );
+    setMeta("og:type", "website");
+    if (mergedImageUrl) setMeta("og:image", mergedImageUrl);
+  }, [bouquet, mergedImageUrl, recipientName]);
+
+  const handleCopyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      toast.success("Link copied to clipboard!");
+    } catch {
+      toast.error("Could not copy link.");
+    }
+  };
+
   const isPageLoading = isLoading || isRendering;
+  const shareUrl = window.location.href;
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen" style={{ position: "relative", zIndex: 2 }}>
       {/* Header */}
       <header
         className="sticky top-0 z-40 border-b border-bloom-divider/50 backdrop-blur-md"
@@ -53,18 +98,50 @@ export default function ViewPage() {
               Bloom
             </span>
           </Link>
-          <Link
-            to="/"
-            data-ocid="view.link"
-            className="flex items-center gap-2 font-serif text-sm text-bloom-subtle transition-colors hover:text-bloom-heading"
-            style={{ fontWeight: 300 }}
-          >
-            <ArrowLeft className="h-4 w-4" /> Create Your Own
-          </Link>
+          <nav className="flex items-center gap-6">
+            <Link
+              to="/gallery"
+              data-ocid="view.link"
+              className="font-serif text-base text-bloom-subtle transition-colors hover:text-bloom-heading"
+              style={{ fontWeight: 300 }}
+            >
+              Gallery
+            </Link>
+            <Link
+              to="/"
+              data-ocid="view.link"
+              className="flex items-center gap-2 font-serif text-sm text-bloom-subtle transition-colors hover:text-bloom-heading"
+              style={{ fontWeight: 300 }}
+            >
+              <ArrowLeft className="h-4 w-4" /> Create Your Own
+            </Link>
+          </nav>
         </div>
       </header>
 
       <main className="mx-auto max-w-2xl px-6 py-16">
+        {/* Recipient banner */}
+        {recipientName && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="mb-8 rounded-2xl px-6 py-4 text-center"
+            style={{
+              background: "rgba(219,130,130,0.1)",
+              border: "1px solid rgba(219,130,130,0.25)",
+            }}
+          >
+            <p
+              className="font-serif text-xl text-bloom-heading"
+              style={{ fontStyle: "italic", fontWeight: 300 }}
+            >
+              This bouquet is for{" "}
+              <span style={{ fontWeight: 600 }}>{recipientName}</span> 💐
+            </p>
+          </motion.div>
+        )}
+
         {isPageLoading && (
           <div
             className="flex flex-col items-center gap-4 py-24"
@@ -94,7 +171,7 @@ export default function ViewPage() {
               className="font-serif text-base text-bloom-subtle"
               style={{ fontStyle: "italic", fontWeight: 300 }}
             >
-              This bouquet link may have expired or doesn't exist.
+              This bouquet link may have expired or doesn’t exist.
             </p>
             <Link
               to="/"
@@ -126,29 +203,30 @@ export default function ViewPage() {
               <DiamondDivider />
             </div>
 
-            {/* Bouquet preview — portrait, no stretch */}
+            {/* Bouquet preview */}
             <div
               style={{
-                position: "relative",
                 width: "100%",
                 maxWidth: "420px",
                 margin: "0 auto",
+                aspectRatio: "3 / 4",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                background: "transparent",
                 borderRadius: "16px",
-                overflow: "hidden",
                 boxShadow: "0 20px 40px rgba(0,0,0,0.08)",
               }}
             >
-              <div style={{ paddingTop: "133.33%" }} />
               <img
                 src={mergedImageUrl}
                 alt="Custom bouquet with personal message card"
                 style={{
-                  position: "absolute",
-                  inset: 0,
                   width: "100%",
                   height: "100%",
-                  objectFit: "cover",
+                  objectFit: "contain",
                   display: "block",
+                  borderRadius: "16px",
                 }}
               />
             </div>
@@ -167,8 +245,53 @@ export default function ViewPage() {
                 data-ocid="view.secondary_button"
                 className="inline-flex items-center gap-2 rounded-full border border-bloom-gold/50 px-8 py-3 font-sans text-sm font-semibold text-bloom-gold transition-all hover:bg-bloom-gold/10"
               >
-                Create Your Own ✦
+                Create Your Own ❖
               </Link>
+            </div>
+
+            {/* Social share row */}
+            <div
+              className="flex flex-wrap justify-center gap-3 p-4 rounded-2xl bg-white/60 border border-bloom-divider/40 backdrop-blur-sm w-full"
+              data-ocid="view.panel"
+            >
+              <p className="w-full text-center font-serif text-sm text-bloom-subtle italic mb-2">
+                Share this bouquet
+              </p>
+              <a
+                href={`https://wa.me/?text=${encodeURIComponent(`I created this bouquet for you 💐 ${shareUrl}`)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 rounded-full bg-[#25D366] px-4 py-2 text-white text-xs font-semibold hover:opacity-90 transition-opacity"
+                data-ocid="view.primary_button"
+              >
+                WhatsApp
+              </a>
+              <a
+                href={`https://twitter.com/intent/tweet?text=${encodeURIComponent("I created this bouquet for you 💐")}&url=${encodeURIComponent(shareUrl)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 rounded-full bg-black px-4 py-2 text-white text-xs font-semibold hover:opacity-90 transition-opacity"
+                data-ocid="view.toggle"
+              >
+                X / Twitter
+              </a>
+              <a
+                href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 rounded-full bg-[#1877F2] px-4 py-2 text-white text-xs font-semibold hover:opacity-90 transition-opacity"
+                data-ocid="view.link"
+              >
+                Facebook
+              </a>
+              <button
+                type="button"
+                onClick={handleCopyLink}
+                className="flex items-center gap-2 rounded-full bg-bloom-gold/20 border border-bloom-gold/40 px-4 py-2 text-bloom-gold text-xs font-semibold hover:bg-bloom-gold/30 transition-colors"
+                data-ocid="view.save_button"
+              >
+                Copy Link
+              </button>
             </div>
           </motion.div>
         )}
@@ -187,7 +310,7 @@ export default function ViewPage() {
               className="font-serif text-base text-bloom-subtle"
               style={{ fontStyle: "italic", fontWeight: 300 }}
             >
-              This bouquet link may have expired or doesn't exist.
+              This bouquet link may have expired or doesn’t exist.
             </p>
             <Link
               to="/"
@@ -199,24 +322,7 @@ export default function ViewPage() {
         )}
       </main>
 
-      {/* Footer */}
-      <footer
-        className="mt-24 border-t border-bloom-divider/50 py-10 text-center"
-        style={{ background: "rgba(247,216,191,0.3)" }}
-      >
-        <p className="font-sans text-xs text-bloom-subtle">
-          © {new Date().getFullYear()}. Built with{" "}
-          <span className="text-bloom-blush">♥</span> using{" "}
-          <a
-            href={`https://caffeine.ai?utm_source=caffeine-footer&utm_medium=referral&utm_content=${encodeURIComponent(window.location.hostname)}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-bloom-gold hover:underline"
-          >
-            caffeine.ai
-          </a>
-        </p>
-      </footer>
+      <Footer />
     </div>
   );
 }

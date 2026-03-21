@@ -14,6 +14,18 @@ export function useGetBouquet(id: string | undefined) {
   });
 }
 
+export function useGetRecentBouquets(limit: number) {
+  const { actor, isFetching } = useActor();
+  return useQuery<BouquetRecord[]>({
+    queryKey: ["recentBouquets", limit],
+    queryFn: async () => {
+      if (!actor) return [];
+      return actor.getRecentBouquets(BigInt(limit));
+    },
+    enabled: !!actor && !isFetching,
+  });
+}
+
 export function useCreateBouquet() {
   const { actor } = useActor();
   return useMutation({
