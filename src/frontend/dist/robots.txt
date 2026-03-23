@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /bouquet/
+Disallow: /view/
+
+Sitemap: https://petalnest.app/sitemap.xml

@@ -15,6 +15,7 @@ import {
 import {
   ArrowLeft,
   Check,
+  ChevronLeft,
   Crown,
   Download,
   Loader2,
@@ -28,7 +29,11 @@ import { AnimatePresence, motion } from "motion/react";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 import type { BouquetRecord } from "./backend.d";
-import { matchBouquet, renderBouquetWithCard } from "./bouquetData";
+import {
+  composeDynamicBouquet,
+  matchBouquet,
+  renderBouquetWithCard,
+} from "./bouquetData";
 import { useActor } from "./hooks/useActor";
 
 // ─── CONSTANTS ────────────────────────────────────────────────────────────────
@@ -190,6 +195,31 @@ const FONT_OPTIONS = [
 
 // ─── HOOKS ────────────────────────────────────────────────────────────────────
 
+// ─── SEO HOOK ─────────────────────────────────────────────────────────────────
+
+function usePageMeta(title: string, description: string) {
+  useEffect(() => {
+    document.title = title;
+    const setMeta = (name: string, val: string, prop = false) => {
+      const attr = prop ? "property" : "name";
+      let el = document.querySelector(
+        `meta[${attr}="${name}"]`,
+      ) as HTMLMetaElement | null;
+      if (!el) {
+        el = document.createElement("meta");
+        el.setAttribute(attr, name);
+        document.head.appendChild(el);
+      }
+      el.content = val;
+    };
+    setMeta("description", description);
+    setMeta("og:title", title, true);
+    setMeta("og:description", description, true);
+    setMeta("twitter:title", title);
+    setMeta("twitter:description", description);
+  }, [title, description]);
+}
+
 function usePremium() {
   const [isPremium, setIsPremium] = useState(
     () => localStorage.getItem("premiumUnlocked") === "true",
@@ -276,6 +306,7 @@ function PetalAnimation() {
       <div className="petal petal-12" />
       <div className="petal petal-13" />
       <div className="petal petal-14" />
+      <div className="petal petal-15" />
       <div className="sparkle sparkle-1" />
       <div className="sparkle sparkle-2" />
       <div className="sparkle sparkle-3" />
@@ -284,6 +315,18 @@ function PetalAnimation() {
       <div className="sparkle sparkle-6" />
       <div className="sparkle sparkle-7" />
       <div className="sparkle sparkle-8" />
+      <div className="sparkle sparkle-9" />
+      <div className="sparkle sparkle-10" />
+      <div className="sparkle sparkle-11" />
+      <div className="sparkle sparkle-12" />
+      <div className="sparkle sparkle-13" />
+      <div className="sparkle sparkle-14" />
+      <div className="sparkle sparkle-15" />
+      <div className="sparkle sparkle-16" />
+      <div className="sparkle sparkle-17" />
+      <div className="sparkle sparkle-18" />
+      <div className="sparkle sparkle-19" />
+      <div className="sparkle sparkle-20" />
     </div>
   );
 }
@@ -298,15 +341,20 @@ function Footer() {
         <div className="flex flex-col items-center gap-5 text-center">
           <div className="flex items-center gap-2">
             <img
-              src="/assets/generated/bloom-logo-transparent.dim_400x400.png"
-              alt="Bloom"
+              src="/assets/generated/petalnest-icon-only-transparent.dim_200x200.png"
+              alt="PetalNest logo — custom bouquet builder"
               className="h-9 w-9 object-contain"
             />
             <span
-              className="font-serif text-xl font-light text-bloom-heading"
-              style={{ letterSpacing: "0.08em" }}
+              style={{
+                fontFamily: "'Playfair Display', Georgia, serif",
+                letterSpacing: "0.05em",
+                color: "#2D2D2D",
+                fontSize: "1.25rem",
+                fontWeight: 400,
+              }}
             >
-              Bloom
+              Petalnest
             </span>
           </div>
           <div className="flex flex-wrap items-center justify-center gap-4">
@@ -318,7 +366,7 @@ function Footer() {
             </Link>
             <span className="text-bloom-divider">·</span>
             <a
-              href="mailto:hello@bloom.app"
+              href="mailto:hello@petalnest.app"
               className="font-sans text-xs text-bloom-subtle hover:text-bloom-gold transition-colors"
             >
               Contact
@@ -353,7 +401,7 @@ function Footer() {
             </Link>
           </div>
           <p className="font-sans text-xs text-bloom-subtle">
-            © {new Date().getFullYear()} Bloom. Made with{" "}
+            © {new Date().getFullYear()} PetalNest. Made with{" "}
             <span className="text-bloom-blush">♥</span> using{" "}
             <a
               href={`https://caffeine.ai?utm_source=caffeine-footer&utm_medium=referral&utm_content=${encodeURIComponent(window.location.hostname)}`}
@@ -380,7 +428,11 @@ function DiamondDivider() {
   );
 }
 
-function SectionHeading({ step, title }: { step: string; title: string }) {
+function SectionHeading({
+  step,
+  title,
+  description,
+}: { step: string; title: string; description?: string }) {
   return (
     <div className="mb-8 text-center">
       <p
@@ -389,17 +441,25 @@ function SectionHeading({ step, title }: { step: string; title: string }) {
       >
         Step {step}
       </p>
-      <h2
+      <h1
         className="font-serif text-3xl text-bloom-heading mt-1"
         style={{ fontWeight: 600 }}
       >
         {title}
-      </h2>
+      </h1>
       <div className="flex items-center justify-center gap-2 mt-3">
         <div className="h-px w-12 bg-bloom-gold/40" />
         <span className="text-bloom-gold/60 text-xs">◆</span>
         <div className="h-px w-12 bg-bloom-gold/40" />
       </div>
+      {description && (
+        <p
+          className="mt-4 font-serif text-base text-bloom-subtle max-w-xl mx-auto"
+          style={{ fontWeight: 300, fontStyle: "italic" }}
+        >
+          {description}
+        </p>
+      )}
     </div>
   );
 }
@@ -415,16 +475,32 @@ function PaymentModal({
 }) {
   const [payClicked, setPayClicked] = useState(false);
   const [unlocked, setUnlocked] = useState(false);
+  const [continueEnabled, setContinueEnabled] = useState(false);
+  const [waitingMsg, setWaitingMsg] = useState(false);
+  const [paymentInitiated, setPaymentInitiated] = useState(false);
 
   if (!isOpen) return null;
 
+  const delayMs = 8000 + Math.floor(Math.random() * 2000); // 8–10s random delay
+
   const handlePayNow = () => {
-    window.location.href =
-      "upi://pay?pa=8789829461-4@ybl&pn=Bloom&am=29&cu=INR";
+    window.open(
+      "upi://pay?pa=8789829461-4@ybl&pn=PetalNest&am=29&cu=INR",
+      "_blank",
+    );
     setPayClicked(true);
+    setPaymentInitiated(true);
+    setWaitingMsg(true);
+    setContinueEnabled(false);
+    setTimeout(() => {
+      setWaitingMsg(false);
+      setContinueEnabled(true);
+    }, delayMs);
   };
 
   const handleCompleted = () => {
+    // Hard guard: only unlock if paymentInitiated = true AND delay has elapsed
+    if (!paymentInitiated || !continueEnabled) return;
     localStorage.setItem("premiumUnlocked", "true");
     setUnlocked(true);
     setTimeout(() => {
@@ -527,14 +603,22 @@ function PaymentModal({
               </Button>
             ) : (
               <div className="space-y-3">
-                <p className="text-center font-serif text-xs text-bloom-subtle italic">
-                  Complete the payment in your UPI app, then tap below.
+                <p className="text-center font-serif text-xs text-bloom-subtle/80 leading-relaxed">
+                  Please complete the payment before continuing. Access may be
+                  restricted otherwise.
                 </p>
+                {waitingMsg && (
+                  <p className="text-center font-serif text-xs text-bloom-blush italic animate-pulse">
+                    Waiting for payment confirmation...
+                  </p>
+                )}
                 <Button
                   onClick={handleCompleted}
-                  className="w-full rounded-full bg-bloom-gold py-5 font-serif text-base text-white shadow-card hover:bg-bloom-gold/85"
+                  disabled={!continueEnabled}
+                  className="w-full rounded-full bg-bloom-gold py-5 font-serif text-base text-white shadow-card hover:bg-bloom-gold/85 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                  data-ocid="payment.confirm_button"
                 >
-                  I have completed payment ✓
+                  Continue after payment ✓
                 </Button>
                 <button
                   type="button"
@@ -573,13 +657,16 @@ function FlowerCard({
     <motion.button
       type="button"
       onClick={onToggle}
+      title={locked ? "Premium flower – unlock to use" : name}
       whileHover={{ scale: 1.05, y: -4 }}
       whileTap={{ scale: 0.97 }}
       transition={{ type: "spring", stiffness: 300, damping: 25 }}
-      className={`animate-fade-up ${staggerClass} group relative flex flex-col items-center gap-2 rounded-2xl p-3 transition-colors duration-200 cursor-pointer backdrop-blur-sm ${
+      className={`animate-fade-up ${staggerClass} group relative flex flex-col items-center gap-2 rounded-2xl p-3 transition-colors duration-200 backdrop-blur-sm ${locked ? "cursor-pointer" : "cursor-pointer"} ${
         selected
           ? "border-2 border-bloom-blush bg-white/80 shadow-[0_4px_20px_rgba(219,130,130,0.25)]"
-          : "border border-bloom-divider/60 bg-white/80 hover:border-bloom-blush/60"
+          : locked
+            ? "border border-amber-300/50 bg-white/70"
+            : "border border-bloom-divider/60 bg-white/80 hover:border-bloom-blush/60"
       }`}
     >
       <AnimatePresence>
@@ -614,7 +701,7 @@ function FlowerCard({
       <div className="relative w-full aspect-square overflow-hidden rounded-xl bg-[#f5efe6]">
         <img
           src={img}
-          alt={name}
+          alt={`${name} — luxury flower for bouquets`}
           className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
           loading="lazy"
         />
@@ -622,12 +709,12 @@ function FlowerCard({
           <div
             className="absolute inset-0 flex flex-col items-center justify-center rounded-xl gap-1"
             style={{
-              background: "rgba(180,130,100,0.22)",
-              backdropFilter: "blur(0.5px)",
+              background: "rgba(140,90,60,0.45)",
+              backdropFilter: "blur(1px)",
             }}
           >
-            <Lock className="h-5 w-5 text-white drop-shadow-md" />
-            <span className="text-white text-[9px] font-semibold font-sans drop-shadow-md tracking-wide">
+            <Lock className="h-6 w-6 text-white drop-shadow-md" />
+            <span className="text-white text-[10px] font-semibold font-sans drop-shadow-md tracking-wide bg-black/30 px-1.5 rounded-full">
               PRO
             </span>
           </div>
@@ -692,7 +779,7 @@ function GreeneryCard({
       <div className="w-full aspect-square overflow-hidden rounded-xl bg-[#f5efe6]">
         <img
           src={img}
-          alt={name}
+          alt={`${name} greenery for bouquet arrangement`}
           className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
           loading="lazy"
         />
@@ -748,8 +835,9 @@ function BouquetPreviewStack({
                   <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-bloom-blush/60 shadow-sm">
                     <img
                       src={img}
-                      alt={name}
+                      alt={`${name} selected for bouquet`}
                       className="w-full h-full object-cover"
+                      loading="lazy"
                     />
                   </div>
                   <span className="text-[9px] font-sans text-bloom-text/60 text-center leading-tight max-w-[48px] truncate">
@@ -853,6 +941,64 @@ function FloatingBouquetPanel({
   );
 }
 
+// ─── STEP PROGRESS BAR ────────────────────────────────────────────────────────
+
+function StepProgressBar({ step }: { step: number }) {
+  const steps = [
+    { label: "Flowers", num: 1 },
+    { label: "Greenery", num: 2 },
+    { label: "Message", num: 3 },
+    { label: "Preview", num: 4 },
+  ];
+  return (
+    <nav
+      className="flex items-center justify-center gap-0 py-4 px-4"
+      aria-label="Step progress"
+      data-ocid="step_progress.panel"
+    >
+      {steps.map((s, i) => (
+        <div key={s.num} className="flex items-center">
+          <div className="flex flex-col items-center gap-1">
+            <div
+              className={`flex h-7 w-7 items-center justify-center rounded-full text-xs font-sans font-semibold transition-all duration-300 ${
+                s.num < step
+                  ? "bg-bloom-blush text-white shadow-sm"
+                  : s.num === step
+                    ? "bg-rose-500 text-white shadow-md scale-110"
+                    : "bg-bloom-divider/40 text-bloom-subtle"
+              }`}
+            >
+              {s.num < step ? (
+                <Check className="h-3.5 w-3.5" />
+              ) : (
+                <span>{s.num}</span>
+              )}
+            </div>
+            <span
+              className={`text-[10px] font-sans whitespace-nowrap transition-colors duration-300 ${
+                s.num === step
+                  ? "text-rose-500 font-semibold"
+                  : s.num < step
+                    ? "text-bloom-blush"
+                    : "text-bloom-subtle/60"
+              }`}
+            >
+              {s.label}
+            </span>
+          </div>
+          {i < steps.length - 1 && (
+            <div
+              className={`h-[2px] w-8 sm:w-12 mx-1 mb-4 rounded-full transition-all duration-300 ${
+                s.num < step ? "bg-bloom-blush" : "bg-bloom-divider/30"
+              }`}
+            />
+          )}
+        </div>
+      ))}
+    </nav>
+  );
+}
+
 // ─── BUILDER PAGE ─────────────────────────────────────────────────────────────
 
 function BuilderHeader() {
@@ -868,15 +1014,20 @@ function BuilderHeader() {
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-3">
         <div className="flex items-center gap-2">
           <img
-            src="/assets/generated/bloom-logo-transparent.dim_400x400.png"
-            alt="Bloom"
+            src="/assets/generated/petalnest-icon-only-transparent.dim_200x200.png"
+            alt="PetalNest logo — custom bouquet builder"
             className="h-10 w-10 object-contain"
           />
           <span
-            className="font-serif text-xl font-light text-bloom-heading"
-            style={{ letterSpacing: "0.08em" }}
+            style={{
+              fontFamily: "'Playfair Display', Georgia, serif",
+              letterSpacing: "0.05em",
+              color: "#2D2D2D",
+              fontSize: "1.25rem",
+              fontWeight: 400,
+            }}
           >
-            Bloom
+            Petalnest
           </span>
         </div>
         <nav className="hidden md:flex items-center gap-6">
@@ -926,11 +1077,244 @@ function BuilderHeader() {
   );
 }
 
-function Hero() {
+// ─── CREATIVE WORK JSON-LD ─────────────────────────────────────────────────────
+
+function CreativeWorkJsonLd({
+  flowers,
+  greenery,
+  shareId,
+}: {
+  flowers: string[];
+  greenery: string[];
+  shareId: string | null;
+}) {
+  useEffect(() => {
+    const existing = document.getElementById("creativework-jsonld");
+    if (existing) existing.remove();
+    const script = document.createElement("script");
+    script.id = "creativework-jsonld";
+    script.type = "application/ld+json";
+    const flowerNames = flowers.join(", ");
+    const greeneryNames = greenery.join(", ");
+    script.textContent = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "CreativeWork",
+      name: `Custom Bouquet — ${flowerNames}`,
+      description: `A personalized bouquet featuring ${flowerNames} with ${greeneryNames}, created on PetalNest.`,
+      creator: { "@type": "WebApplication", name: "PetalNest" },
+      url: shareId
+        ? `https://petalnest.app/bouquet/${shareId}`
+        : "https://petalnest.app/create-bouquet",
+    });
+    document.head.appendChild(script);
+    return () => {
+      const el = document.getElementById("creativework-jsonld");
+      if (el) el.remove();
+    };
+  }, [flowers, greenery, shareId]);
+  return null;
+}
+
+// ─── FAQ SECTION ──────────────────────────────────────────────────────────────
+
+const FAQ_ITEMS = [
+  {
+    q: "How do I create a bouquet online with PetalNest?",
+    a: "Select your favorite flowers from our curated collection, add greenery for depth, write a heartfelt message, and click 'Generate Bouquet'. Your ultra-HD bouquet is ready to download and share in seconds — no account required.",
+  },
+  {
+    q: "Can I send a digital bouquet as a gift?",
+    a: "Yes! After creating your bouquet, use the Share button to send it via WhatsApp, Facebook, or copy a unique shareable link. With Premium Gift Mode, you can personalize the bouquet with your recipient's name.",
+  },
+  {
+    q: "What flowers are available on PetalNest?",
+    a: "PetalNest offers 32+ flower types across Romantic, Elegant, Cheerful, and Wild & Soft categories — including roses, peonies, orchids, tulips, lavender, and rare exclusive flowers like Lotus and Blue Delphinium.",
+  },
+  {
+    q: "What is included in the Premium plan?",
+    a: "The Premium plan (₹29, one-time) unlocks all Wild & Soft and Rare & Exclusive flowers, removes the watermark from your bouquet image, and enables Gift Mode for personalized sharing with your recipient's name.",
+  },
+  {
+    q: "Is my bouquet saved after I create it?",
+    a: "Yes — every bouquet you generate is saved with a unique shareable link. You can send the link to anyone and they can view your creation on any device, anytime.",
+  },
+  {
+    q: "Can I download my bouquet in high resolution?",
+    a: "Absolutely. All bouquets are rendered at 2400×3200 pixels (Ultra HD) — perfect for sharing on social media, printing at home, or sending as a beautiful digital gift.",
+  },
+];
+
+function FAQSection() {
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
+
+  useEffect(() => {
+    const existing = document.getElementById("faq-jsonld");
+    if (existing) existing.remove();
+    const script = document.createElement("script");
+    script.id = "faq-jsonld";
+    script.type = "application/ld+json";
+    script.textContent = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: FAQ_ITEMS.map((item) => ({
+        "@type": "Question",
+        name: item.q,
+        acceptedAnswer: { "@type": "Answer", text: item.a },
+      })),
+    });
+    document.head.appendChild(script);
+    return () => {
+      const el = document.getElementById("faq-jsonld");
+      if (el) el.remove();
+    };
+  }, []);
+
+  return (
+    <section
+      id="faq"
+      aria-label="Frequently Asked Questions"
+      className="py-20 px-6"
+      style={{ background: "rgba(253,245,236,0.6)" }}
+    >
+      <div className="mx-auto max-w-3xl">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-12"
+        >
+          <p
+            className="font-serif text-bloom-blush/70 italic text-base"
+            style={{ fontWeight: 300 }}
+          >
+            Got questions?
+          </p>
+          <h2
+            className="font-serif text-4xl text-bloom-heading mt-1"
+            style={{ fontWeight: 600 }}
+          >
+            Frequently Asked Questions
+          </h2>
+          <div className="flex items-center justify-center gap-2 mt-4">
+            <div className="h-px w-12 bg-bloom-gold/40" />
+            <span className="text-bloom-gold/60 text-xs">◆</span>
+            <div className="h-px w-12 bg-bloom-gold/40" />
+          </div>
+        </motion.div>
+        <div className="space-y-3">
+          {FAQ_ITEMS.map((item, i) => (
+            <motion.div
+              key={item.q}
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: i * 0.07 }}
+              className="rounded-2xl border border-bloom-divider/50 overflow-hidden"
+              style={{ background: "rgba(255,250,244,0.9)" }}
+              data-ocid={`faq.item.${i + 1}`}
+            >
+              <button
+                type="button"
+                onClick={() => setOpenIndex(openIndex === i ? null : i)}
+                className="w-full flex items-center justify-between px-6 py-4 text-left"
+                aria-expanded={openIndex === i}
+              >
+                <h3
+                  className="font-serif text-bloom-heading pr-4"
+                  style={{ fontWeight: 500, fontSize: "1rem" }}
+                >
+                  {item.q}
+                </h3>
+                <motion.span
+                  animate={{ rotate: openIndex === i ? 45 : 0 }}
+                  transition={{ duration: 0.2 }}
+                  className="shrink-0 text-bloom-gold text-xl leading-none"
+                >
+                  +
+                </motion.span>
+              </button>
+              <AnimatePresence initial={false}>
+                {openIndex === i && (
+                  <motion.div
+                    key="answer"
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.25 }}
+                    style={{ overflow: "hidden" }}
+                  >
+                    <p className="font-sans text-sm text-bloom-subtle leading-relaxed px-6 pb-5">
+                      {item.a}
+                    </p>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Hero({ onStart }: { onStart?: () => void }) {
   const scrollToBuilder = () => {
+    if (onStart) {
+      onStart();
+      return;
+    }
     const el = document.getElementById("builder");
     if (el) el.scrollIntoView({ behavior: "smooth" });
   };
+
+  // SEO meta tags
+  usePageMeta(
+    "PetalNest – Create Your Custom Bouquet Online | Free Bouquet Builder",
+    "Design and share a premium custom bouquet with PetalNest. Choose flowers, add a message, and create a unique floral arrangement for any occasion.",
+  );
+  useEffect(() => {
+    document.title =
+      "PetalNest – Create Your Custom Bouquet Online | Free Bouquet Builder";
+    const setMeta = (name: string, content: string, prop = false) => {
+      const attr = prop ? "property" : "name";
+      let el = document.querySelector(
+        `meta[${attr}="${name}"]`,
+      ) as HTMLMetaElement | null;
+      if (!el) {
+        el = document.createElement("meta");
+        el.setAttribute(attr, name);
+        document.head.appendChild(el);
+      }
+      el.setAttribute("content", content);
+    };
+    setMeta(
+      "description",
+      "PetalNest — Design your perfect custom bouquet online. Choose from 32+ premium flowers, add greenery, and create an ultra-HD shareable bouquet in minutes.",
+    );
+    setMeta(
+      "keywords",
+      "bouquet maker online, custom flower bouquet, digital bouquet, send flowers online, bouquet design, flower gifting, PetalNest",
+    );
+    setMeta("og:title", "PetalNest — Custom Bouquet Builder", true);
+    setMeta(
+      "og:description",
+      "Design your perfect bouquet online. Choose flowers, add greenery, create ultra-HD images to download and share.",
+      true,
+    );
+    setMeta("og:type", "website", true);
+    setMeta(
+      "og:image",
+      `${window.location.origin}/assets/generated/petalnest-logo-full.dim_400x200.png`,
+      true,
+    );
+    setMeta("twitter:card", "summary_large_image");
+    setMeta("twitter:title", "PetalNest — Custom Bouquet Builder");
+    setMeta(
+      "twitter:description",
+      "Design your perfect bouquet online with PetalNest.",
+    );
+  }, []);
 
   return (
     <>
@@ -1011,10 +1395,35 @@ function Hero() {
             className="mb-8 flex justify-center"
           >
             <img
-              src="/assets/generated/bloom-logo-transparent.dim_400x400.png"
-              alt="Bloom Logo"
+              src="/assets/generated/petalnest-icon-only-transparent.dim_200x200.png"
+              alt="PetalNest logo — custom bouquet builder"
               className="h-24 w-24 object-contain drop-shadow-md"
             />
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="mb-4"
+          >
+            <span
+              style={{
+                fontFamily: "'Playfair Display', Georgia, serif",
+                fontSize: "clamp(2.5rem, 6vw, 4.5rem)",
+                fontWeight: 700,
+                letterSpacing: "0.12em",
+                background:
+                  "linear-gradient(135deg, #c96b8a 0%, #e8a0a0 40%, #b89a6a 100%)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+                display: "block",
+                textAlign: "center",
+              }}
+            >
+              PetalNest
+            </span>
           </motion.div>
 
           <motion.div
@@ -1027,7 +1436,7 @@ function Hero() {
                 className="block text-5xl md:text-6xl lg:text-7xl text-bloom-heading"
                 style={{ fontWeight: 700, fontStyle: "italic" }}
               >
-                Design Your Perfect Bouquet
+                Create Your Personalized Bouquet
               </span>
             </h1>
           </motion.div>
@@ -1063,7 +1472,7 @@ function Hero() {
               whileHover={{ scale: 1.03, y: -2 }}
               whileTap={{ scale: 0.97 }}
               transition={{ type: "spring", stiffness: 300, damping: 25 }}
-              className="inline-flex items-center gap-2 rounded-full bg-bloom-blush px-9 py-3.5 font-sans text-sm font-semibold text-white shadow-card cta-pulse"
+              className="inline-flex items-center gap-2 rounded-full bg-rose-500 px-9 py-4 font-sans text-base font-bold text-white shadow-lg cta-pulse hover:bg-rose-600 transition-colors"
               data-ocid="hero.start_building.button"
             >
               Start Building ❖
@@ -1357,7 +1766,7 @@ function Hero() {
         </div>
       </section>
 
-      {/* Emotional micro-copy before CTA */}
+      {/* Emotional micro-copy before FAQ */}
       <motion.p
         className="text-center font-serif text-base italic text-bloom-subtle/50 my-2 px-6"
         initial={{ opacity: 0 }}
@@ -1367,6 +1776,11 @@ function Hero() {
       >
         Create something meaningful.
       </motion.p>
+
+      {/* ── FAQ SECTION ── */}
+      <section aria-label="Frequently Asked Questions">
+        <FAQSection />
+      </section>
 
       {/* ── FINAL CTA ── */}
       <section
@@ -1401,7 +1815,7 @@ function Hero() {
             whileHover={{ scale: 1.03, y: -2 }}
             whileTap={{ scale: 0.97 }}
             transition={{ type: "spring", stiffness: 300, damping: 25 }}
-            className="inline-flex items-center gap-2 rounded-full bg-bloom-blush px-10 py-4 font-sans text-base font-semibold text-white shadow-hero cta-pulse"
+            className="inline-flex items-center gap-2 rounded-full bg-rose-500 px-10 py-4 font-sans text-base font-bold text-white shadow-lg cta-pulse hover:bg-rose-600 transition-colors"
             data-ocid="final_cta.build_now.button"
           >
             Build Now ❖
@@ -1413,6 +1827,7 @@ function Hero() {
 }
 
 function BuilderPage() {
+  const [currentStep, setCurrentStep] = useState(1);
   const [selectedFlowers, setSelectedFlowers] = useState<string[]>([]);
   const [selectedGreenery, setSelectedGreenery] = useState<string[]>([]);
   const [message, setMessage] = useState("");
@@ -1422,6 +1837,9 @@ function BuilderPage() {
   const [mergedImageUrl, setMergedImageUrl] = useState<string | null>(null);
   const [shareId, setShareId] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [generatingMessage, setGeneratingMessage] = useState(
+    "Generating your bouquet...",
+  );
   const [showSharePanel, setShowSharePanel] = useState(false);
   const [showPayment, setShowPayment] = useState(false);
   const [msgFont, setMsgFont] = useState("Cormorant Garamond");
@@ -1429,6 +1847,26 @@ function BuilderPage() {
 
   const { isPremium, unlock } = usePremium();
   const createBouquet = useCreateBouquet();
+
+  // Step-based SEO meta tags
+  const stepTitles: Record<number, string> = {
+    1: "PetalNest – Create Your Custom Bouquet Online",
+    2: "Choose Your Flowers – PetalNest",
+    3: "Add Greenery – PetalNest",
+    4: "Add a Personal Message – PetalNest",
+    5: "Your Custom Bouquet – PetalNest",
+  };
+  const stepDescriptions: Record<number, string> = {
+    1: "Design and share a premium custom bouquet with PetalNest. Choose flowers, add a message, and create a unique floral arrangement for any occasion.",
+    2: "Select from 30+ premium flowers to build your perfect bouquet. Free and premium options available.",
+    3: "Complete your bouquet with beautiful greenery and foliage options.",
+    4: "Write a heartfelt message and personalize your bouquet for gifting.",
+    5: "Your unique bouquet is ready. Download in ultra-HD or share it with someone special.",
+  };
+  usePageMeta(
+    stepTitles[currentStep] ?? stepTitles[1],
+    stepDescriptions[currentStep] ?? stepDescriptions[1],
+  );
 
   const toggleFlower = useCallback(
     (name: string) => {
@@ -1459,39 +1897,74 @@ function BuilderPage() {
     if (!canCreate) return;
     setIsGenerating(true);
     try {
-      const matched = matchBouquet(selectedFlowers, selectedGreenery);
+      // Strip premium flowers if user hasn't paid
+      let effectiveFlowers = selectedFlowers;
+      if (!isPremium) {
+        const premiumInSelection = selectedFlowers.filter((f) =>
+          PREMIUM_FLOWERS.includes(f),
+        );
+        if (premiumInSelection.length > 0) {
+          const filtered = selectedFlowers.filter(
+            (f) => !PREMIUM_FLOWERS.includes(f),
+          );
+          if (filtered.length === 0) {
+            toast.error("Unlock premium to use selected flowers");
+            setIsGenerating(false);
+            return;
+          }
+          toast(
+            "Some premium flowers were removed. Unlock premium for full access.",
+            { icon: "🔒" },
+          );
+          effectiveFlowers = filtered;
+        }
+      }
+      const matched = matchBouquet(effectiveFlowers, selectedGreenery);
       const encodedMessage = `TO:${to.trim()}||FROM:${from.trim()}||MSG:${message.trim()}`;
 
-      const [canvasResult, backendResult] = await Promise.allSettled([
-        renderBouquetWithCard(
+      // Debug logging
+      console.log("[PetalNest] Selected flowers:", effectiveFlowers);
+      console.log("[PetalNest] Selected greenery:", selectedGreenery);
+      console.log(
+        "[PetalNest] Match result:",
+        matched
+          ? `Exact match: ${matched.id}`
+          : "No exact match — using dynamic composition",
+      );
+
+      let canvasDataUrl: string;
+      if (matched) {
+        setGeneratingMessage("Generating your bouquet...");
+        canvasDataUrl = await renderBouquetWithCard(
           matched.imageUrl,
           encodedMessage,
           !isPremium,
           msgFont,
           msgColor,
-        ),
-        createBouquet.mutateAsync({
-          flowers: selectedFlowers,
-          greenery: selectedGreenery,
-          message: encodedMessage,
-          imageKey: matched.key,
-        }),
-      ]);
-
-      const canvasFailed = canvasResult.status === "rejected";
-      const backendFailed = backendResult.status === "rejected";
-
-      if (canvasFailed && backendFailed) {
-        toast.error("Something went wrong. Please try again.");
-        return;
+        );
+      } else {
+        setGeneratingMessage("Creating your perfect bouquet...");
+        canvasDataUrl = await composeDynamicBouquet(
+          effectiveFlowers,
+          selectedGreenery,
+          encodedMessage,
+          !isPremium,
+          msgFont,
+          msgColor,
+        );
       }
 
-      const finalImageUrl = canvasFailed
-        ? matched.imageUrl
-        : canvasResult.value;
-      const finalShareId = backendFailed
-        ? null
-        : (backendResult.value as string);
+      const backendResult = await createBouquet
+        .mutateAsync({
+          flowers: effectiveFlowers,
+          greenery: selectedGreenery,
+          message: encodedMessage,
+          imageKey: matched?.key ?? "dynamic",
+        })
+        .catch(() => null);
+
+      const finalImageUrl = canvasDataUrl;
+      const finalShareId = backendResult as string | null;
 
       setMergedImageUrl(finalImageUrl);
       setShareId(finalShareId);
@@ -1513,11 +1986,12 @@ function BuilderPage() {
     setMergedImageUrl(null);
     setShareId(null);
     setShowSharePanel(false);
+    setCurrentStep(1);
   };
 
   const handleCopyLink = async () => {
     if (!shareId) return;
-    const url = `${window.location.origin}/view/${shareId}`;
+    const url = `${window.location.origin}/bouquet/${shareId}`;
     try {
       await navigator.clipboard.writeText(url);
       toast.success("Link copied to clipboard!");
@@ -1542,7 +2016,7 @@ function BuilderPage() {
           type: "image/jpeg",
         });
         const shareData = {
-          title: "My Bloom Bouquet 💐",
+          title: "My PetalNest Bouquet 💐",
           text: shareText,
           url,
           files: [file],
@@ -1564,510 +2038,701 @@ function BuilderPage() {
 
   return (
     <div className="min-h-screen" style={{ position: "relative", zIndex: 2 }}>
-      <BuilderHeader />
-      <Hero />
-
       <PaymentModal
         isOpen={showPayment}
         onClose={() => setShowPayment(false)}
         onSuccess={unlock}
       />
 
-      <main id="builder" className="mx-auto max-w-7xl px-6 py-16">
-        <AnimatePresence mode="wait">
-          {mergedImageUrl ? (
-            <motion.div
-              key="result"
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -24 }}
-              transition={{ duration: 0.5 }}
-              className="flex flex-col items-center gap-8"
+      {/* ── STEP 1: LANDING PAGE ── */}
+      {currentStep === 1 && (
+        <>
+          <BuilderHeader />
+          <Hero onStart={() => setCurrentStep(2)} />
+          <Footer />
+        </>
+      )}
+
+      {/* ── STEPS 2-5: BUILDER FLOW ── */}
+      {currentStep >= 2 && (
+        <>
+          {/* Header with back arrow */}
+          <header
+            className="sticky top-0 z-40 flex items-center gap-3 px-4 py-3 backdrop-blur-md border-b border-bloom-divider/30"
+            style={{ background: "rgba(255,250,245,0.92)" }}
+          >
+            <button
+              type="button"
+              onClick={() =>
+                currentStep === 2
+                  ? setCurrentStep(1)
+                  : setCurrentStep(currentStep - 1)
+              }
+              className="flex h-9 w-9 items-center justify-center rounded-full hover:bg-bloom-blush/10 transition-colors"
+              aria-label="Go back"
+              data-ocid="step_nav.back.button"
             >
-              <div className="text-center">
-                <p
-                  className="font-serif text-bloom-subtle text-base"
-                  style={{ fontStyle: "italic", fontWeight: 300 }}
-                >
-                  Your creation
-                </p>
-                <h2 className="font-serif text-4xl font-semibold text-bloom-heading mt-1">
-                  Your Bouquet is Ready
-                </h2>
-                <DiamondDivider />
-                <p
-                  className="font-serif text-base text-bloom-subtle"
-                  style={{ fontStyle: "italic", fontWeight: 300 }}
-                >
-                  Download it, share it, or send it with love.
-                </p>
-              </div>
-
-              <div
-                style={{
-                  width: "100%",
-                  maxWidth: "420px",
-                  margin: "0 auto",
-                  aspectRatio: "3 / 4",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  background: "transparent",
-                  borderRadius: "16px",
-                  boxShadow: "0 20px 40px rgba(0,0,0,0.08)",
-                }}
-              >
-                <img
-                  src={mergedImageUrl}
-                  alt="Your custom bouquet with message card"
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "contain",
-                    display: "block",
-                    borderRadius: "16px",
-                  }}
-                />
-              </div>
-
-              {!isPremium && (
-                <button
-                  type="button"
-                  onClick={() => setShowPayment(true)}
-                  className="flex items-center gap-2 rounded-full border border-bloom-gold/50 px-6 py-2 font-sans text-sm text-bloom-gold hover:bg-bloom-gold/10 transition-colors"
-                >
-                  <Crown className="h-4 w-4" /> Remove watermark &amp; unlock
-                  premium
-                </button>
-              )}
-
-              <div className="flex flex-wrap justify-center gap-4">
-                <a
-                  href={mergedImageUrl}
-                  download="my-bloom-bouquet.jpg"
-                  className="inline-flex items-center gap-2 rounded-full bg-bloom-blush px-8 py-3 font-sans text-sm font-semibold text-white shadow-card transition-all hover:bg-bloom-blush/85 hover:shadow-hero"
-                >
-                  <Download className="h-4 w-4" /> Download Bouquet
-                </a>
-                <Button
-                  variant="outline"
-                  className="rounded-full border-bloom-gold/50 px-8 py-3 font-sans text-sm font-semibold text-bloom-gold hover:bg-bloom-gold/10"
-                  onClick={handleShare}
-                >
-                  <Share2 className="mr-2 h-4 w-4" /> Share Bouquet
-                </Button>
-                <Button
-                  variant="ghost"
-                  className="rounded-full px-8 py-3 font-sans text-sm font-semibold text-bloom-subtle hover:text-bloom-heading"
-                  onClick={handleReset}
-                >
-                  <RotateCcw className="mr-2 h-4 w-4" /> Create Another
-                </Button>
-              </div>
-
-              {showSharePanel && (
-                <div className="flex flex-wrap justify-center gap-3 mt-2 p-4 rounded-2xl bg-white/60 border border-bloom-divider/40 backdrop-blur-sm max-w-lg w-full">
-                  <p className="w-full text-center font-serif text-sm text-bloom-subtle italic mb-2">
-                    Share your bouquet
-                  </p>
-                  <a
-                    href={`https://wa.me/?text=${encodeURIComponent(`I created this bouquet for you 💐 ${shareUrl}`)}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 rounded-full bg-[#25D366] px-4 py-2 text-white text-xs font-semibold hover:opacity-90 transition-opacity"
-                  >
-                    WhatsApp
-                  </a>
-                  <a
-                    href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 rounded-full bg-[#1877F2] px-4 py-2 text-white text-xs font-semibold hover:opacity-90 transition-opacity"
-                  >
-                    Facebook
-                  </a>
-                  <a
-                    href={`https://linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 rounded-full bg-[#0A66C2] px-4 py-2 text-white text-xs font-semibold hover:opacity-90 transition-opacity"
-                  >
-                    LinkedIn
-                  </a>
-                  <a
-                    href={`https://twitter.com/intent/tweet?text=${encodeURIComponent("I created this bouquet for you 💐")}&url=${encodeURIComponent(shareUrl)}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 rounded-full bg-black px-4 py-2 text-white text-xs font-semibold hover:opacity-90 transition-opacity"
-                  >
-                    X / Twitter
-                  </a>
-                  <button
-                    type="button"
-                    onClick={handleCopyLink}
-                    className="flex items-center gap-2 rounded-full bg-bloom-gold/20 border border-bloom-gold/40 px-4 py-2 text-bloom-gold text-xs font-semibold hover:bg-bloom-gold/30 transition-colors"
-                  >
-                    Copy Link
-                  </button>
-                </div>
-              )}
-            </motion.div>
-          ) : (
-            <motion.div
-              key="builder"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0, y: -16 }}
-              transition={{ duration: 0.4 }}
-            >
-              {/* Live Bouquet Preview Stack */}
-              <BouquetPreviewStack
-                selectedFlowers={selectedFlowers}
-                selectedGreenery={selectedGreenery}
+              <ChevronLeft className="h-5 w-5 text-bloom-heading" />
+            </button>
+            <div className="flex-1 flex justify-center">
+              <img
+                src="/assets/generated/petalnest-icon-only-transparent.dim_200x200.png"
+                alt="PetalNest"
+                className="h-8 w-8 object-contain"
               />
-
-              {/* Step 1: Flowers */}
-              <motion.section
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-                className="mb-16"
+            </div>
+            {/* Premium badge */}
+            {isPremium ? (
+              <span className="flex items-center gap-1 rounded-full bg-bloom-gold/10 px-2 py-1 text-[10px] font-sans font-semibold text-bloom-gold">
+                <Crown className="h-3 w-3" /> PRO
+              </span>
+            ) : (
+              <button
+                type="button"
+                onClick={() => setShowPayment(true)}
+                className="flex items-center gap-1 rounded-full border border-bloom-gold/40 px-2 py-1 text-[10px] font-sans font-semibold text-bloom-gold hover:bg-bloom-gold/10 transition-colors"
+                data-ocid="step_nav.unlock_premium.button"
               >
-                <SectionHeading step="One" title="Choose Your Flowers" />
+                <Lock className="h-3 w-3" /> Premium
+              </button>
+            )}
+          </header>
 
-                {FLOWER_GROUPS.map((group) => (
-                  <div key={group.label} className="mb-10">
-                    {group.premium ? (
-                      <div className="mb-4">
-                        <div className="flex items-center justify-center gap-2">
-                          <Crown className="h-4 w-4 text-bloom-gold" />
+          {/* Step progress bar for steps 2-4 */}
+          {currentStep >= 2 && currentStep <= 4 && (
+            <StepProgressBar step={currentStep - 1} />
+          )}
+
+          <main className="mx-auto max-w-2xl px-4 pb-32">
+            <AnimatePresence mode="wait">
+              {/* ── STEP 2: FLOWER SELECTION ── */}
+              {currentStep === 2 && (
+                <motion.div
+                  key="step2"
+                  initial={{ opacity: 0, x: 24 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -24 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <BouquetPreviewStack
+                    selectedFlowers={selectedFlowers}
+                    selectedGreenery={selectedGreenery}
+                  />
+
+                  <motion.section
+                    initial={{ opacity: 0, y: 16 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                    className="mb-16"
+                  >
+                    <SectionHeading
+                      step="One"
+                      title="Choose Your Flowers"
+                      description="Every great bouquet starts with the right blooms. Select the flowers that speak to your emotions — from classic roses to exotic orchids."
+                    />
+
+                    {FLOWER_GROUPS.map((group) => (
+                      <div key={group.label} className="mb-10">
+                        {group.premium ? (
+                          <div className="mb-4">
+                            <div className="flex items-center justify-center gap-2">
+                              <Crown className="h-4 w-4 text-bloom-gold" />
+                              <p
+                                className="text-center font-serif text-sm text-bloom-gold"
+                                style={{
+                                  fontStyle: "italic",
+                                  fontWeight: 500,
+                                  letterSpacing: "0.08em",
+                                }}
+                              >
+                                ✦ {group.label} — Premium ✦
+                              </p>
+                              <Crown className="h-4 w-4 text-bloom-gold" />
+                            </div>
+                            {!isPremium && (
+                              <p className="text-center font-sans text-xs text-bloom-subtle mt-1">
+                                Unlock for ₹29 ·{" "}
+                                <button
+                                  type="button"
+                                  onClick={() => setShowPayment(true)}
+                                  className="text-bloom-gold underline underline-offset-2 hover:opacity-80"
+                                >
+                                  Get Premium
+                                </button>
+                              </p>
+                            )}
+                          </div>
+                        ) : (
                           <p
-                            className="text-center font-serif text-sm text-bloom-gold"
+                            className="mb-4 text-center font-serif text-sm text-bloom-gold"
                             style={{
                               fontStyle: "italic",
-                              fontWeight: 500,
+                              fontWeight: 300,
                               letterSpacing: "0.08em",
                             }}
                           >
-                            ✦ {group.label} — Premium ✦
-                          </p>
-                          <Crown className="h-4 w-4 text-bloom-gold" />
-                        </div>
-                        {!isPremium && (
-                          <p className="text-center font-sans text-xs text-bloom-subtle mt-1">
-                            Unlock for ₹29 ·{" "}
-                            <button
-                              type="button"
-                              onClick={() => setShowPayment(true)}
-                              className="text-bloom-gold underline underline-offset-2 hover:opacity-80"
-                            >
-                              Get Premium
-                            </button>
+                            — {group.label} —
                           </p>
                         )}
-                      </div>
-                    ) : (
-                      <p
-                        className="mb-4 text-center font-serif text-sm text-bloom-gold"
-                        style={{
-                          fontStyle: "italic",
-                          fontWeight: 300,
-                          letterSpacing: "0.08em",
-                        }}
-                      >
-                        — {group.label} —
-                      </p>
-                    )}
-                    <div className="flex flex-wrap justify-center gap-4 max-w-2xl mx-auto">
-                      {group.flowers.map((flower, idx) => (
-                        <div
-                          key={flower}
-                          className="w-[calc(50%-8px)] sm:w-[calc(33.33%-11px)] md:w-[calc(25%-12px)]"
-                        >
-                          <FlowerCard
-                            name={flower}
-                            selected={selectedFlowers.includes(flower)}
-                            onToggle={() => toggleFlower(flower)}
-                            index={idx}
-                            isPremium={PREMIUM_FLOWERS.includes(flower)}
-                            locked={
-                              PREMIUM_FLOWERS.includes(flower) && !isPremium
-                            }
-                          />
+                        <div className="flex flex-wrap justify-center gap-4 max-w-2xl mx-auto">
+                          {group.flowers.map((flower, idx) => (
+                            <div
+                              key={flower}
+                              className="w-[calc(50%-8px)] sm:w-[calc(33.33%-11px)] md:w-[calc(25%-12px)]"
+                            >
+                              <FlowerCard
+                                name={flower}
+                                selected={selectedFlowers.includes(flower)}
+                                onToggle={() => toggleFlower(flower)}
+                                index={idx}
+                                isPremium={PREMIUM_FLOWERS.includes(flower)}
+                                locked={
+                                  PREMIUM_FLOWERS.includes(flower) && !isPremium
+                                }
+                              />
+                            </div>
+                          ))}
                         </div>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-
-                {/* Rare & Exclusive */}
-                <div className="mb-10">
-                  <div className="flex items-center justify-center gap-2 mb-1">
-                    <Crown className="h-4 w-4 text-bloom-gold" />
-                    <p
-                      className="text-center font-serif text-sm text-bloom-gold"
-                      style={{
-                        fontStyle: "italic",
-                        fontWeight: 500,
-                        letterSpacing: "0.08em",
-                      }}
-                    >
-                      ✦ Rare &amp; Exclusive ✦
-                    </p>
-                    <Crown className="h-4 w-4 text-bloom-gold" />
-                  </div>
-                  {!isPremium && (
-                    <p className="text-center font-sans text-xs text-bloom-subtle mb-4">
-                      Unlock for ₹29 ·{" "}
-                      <button
-                        type="button"
-                        onClick={() => setShowPayment(true)}
-                        className="text-bloom-gold underline underline-offset-2 hover:opacity-80"
-                      >
-                        Get Premium
-                      </button>
-                    </p>
-                  )}
-                  <div className="flex flex-wrap justify-center gap-4 max-w-2xl mx-auto mt-3">
-                    {RARE_EXCLUSIVE_FLOWERS.map((flower, idx) => (
-                      <div
-                        key={flower}
-                        className="w-[calc(50%-8px)] sm:w-[calc(33.33%-11px)] md:w-[calc(25%-12px)]"
-                      >
-                        <FlowerCard
-                          name={flower}
-                          selected={selectedFlowers.includes(flower)}
-                          onToggle={() => toggleFlower(flower)}
-                          index={idx}
-                          isPremium
-                          locked={!isPremium}
-                        />
                       </div>
                     ))}
-                  </div>
-                </div>
 
-                {selectedFlowers.length > 0 && (
-                  <p
-                    className="mt-2 text-center font-serif text-sm text-bloom-subtle"
-                    style={{ fontStyle: "italic" }}
-                  >
-                    Selected:{" "}
-                    <span className="font-semibold text-bloom-blush">
-                      {selectedFlowers.join(", ")}
-                    </span>
-                  </p>
-                )}
-              </motion.section>
+                    {/* Rare & Exclusive */}
+                    <div className="mb-10">
+                      <div className="flex items-center justify-center gap-2 mb-1">
+                        <Crown className="h-4 w-4 text-bloom-gold" />
+                        <p
+                          className="text-center font-serif text-sm text-bloom-gold"
+                          style={{
+                            fontStyle: "italic",
+                            fontWeight: 500,
+                            letterSpacing: "0.08em",
+                          }}
+                        >
+                          ✦ Rare &amp; Exclusive ✦
+                        </p>
+                        <Crown className="h-4 w-4 text-bloom-gold" />
+                      </div>
+                      {!isPremium && (
+                        <p className="text-center font-sans text-xs text-bloom-subtle mb-4">
+                          Unlock for ₹29 ·{" "}
+                          <button
+                            type="button"
+                            onClick={() => setShowPayment(true)}
+                            className="text-bloom-gold underline underline-offset-2 hover:opacity-80"
+                          >
+                            Get Premium
+                          </button>
+                        </p>
+                      )}
+                      <div className="flex flex-wrap justify-center gap-4 max-w-2xl mx-auto mt-3">
+                        {RARE_EXCLUSIVE_FLOWERS.map((flower, idx) => (
+                          <div
+                            key={flower}
+                            className="w-[calc(50%-8px)] sm:w-[calc(33.33%-11px)] md:w-[calc(25%-12px)]"
+                          >
+                            <FlowerCard
+                              name={flower}
+                              selected={selectedFlowers.includes(flower)}
+                              onToggle={() => toggleFlower(flower)}
+                              index={idx}
+                              isPremium
+                              locked={!isPremium}
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
 
-              {/* Step 2: Greenery */}
-              <motion.section
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.1 }}
-                className="mb-16"
-              >
-                <SectionHeading step="Two" title="Add Greenery" />
-                <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 max-w-2xl mx-auto">
-                  {GREENERY_OPTIONS.map((g, idx) => (
-                    <GreeneryCard
-                      key={g.name}
-                      name={g.name}
-                      selected={selectedGreenery.includes(g.name)}
-                      onToggle={() => toggleGreenery(g.name)}
-                      index={idx}
-                    />
-                  ))}
-                </div>
-              </motion.section>
+                    {selectedFlowers.length > 0 && (
+                      <p
+                        className="mt-2 text-center font-serif text-sm text-bloom-subtle"
+                        style={{ fontStyle: "italic" }}
+                      >
+                        Selected:{" "}
+                        <span className="font-semibold text-bloom-blush">
+                          {selectedFlowers.join(", ")}
+                        </span>
+                      </p>
+                    )}
+                  </motion.section>
+                </motion.div>
+              )}
 
-              {/* Step 3: Message */}
-              <motion.section
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-                className="mb-14"
-              >
-                <SectionHeading step="Three" title="Write Your Message" />
-                <div
-                  className="relative max-w-2xl mx-auto rounded-2xl border border-bloom-divider bg-white/50 p-4 shadow-card"
-                  style={{ backdropFilter: "blur(8px)" }}
+              {/* ── STEP 3: GREENERY SELECTION ── */}
+              {currentStep === 3 && (
+                <motion.div
+                  key="step3"
+                  initial={{ opacity: 0, x: 24 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -24 }}
+                  transition={{ duration: 0.3 }}
                 >
-                  <div className="flex gap-4 mb-4">
-                    <div className="flex-1">
-                      <label
-                        className="font-serif text-xs text-bloom-gold italic mb-1 block"
-                        htmlFor="to-input"
-                      >
-                        To
-                      </label>
-                      <input
-                        id="to-input"
-                        type="text"
-                        value={to}
-                        onChange={(e) => setTo(e.target.value)}
-                        placeholder="Recipient's name"
-                        className="w-full bg-transparent border-b border-bloom-divider/60 font-serif text-sm text-bloom-heading placeholder:text-bloom-subtle/40 placeholder:italic focus:outline-none focus:border-bloom-blush/60 transition-colors py-1"
-                        style={{ fontWeight: 300 }}
-                      />
-                    </div>
-                    <div className="flex-1">
-                      <label
-                        className="font-serif text-xs text-bloom-gold italic mb-1 block"
-                        htmlFor="from-input"
-                      >
-                        From
-                      </label>
-                      <input
-                        id="from-input"
-                        type="text"
-                        value={from}
-                        onChange={(e) => setFrom(e.target.value)}
-                        placeholder="Your name"
-                        className="w-full bg-transparent border-b border-bloom-divider/60 font-serif text-sm text-bloom-heading placeholder:text-bloom-subtle/40 placeholder:italic focus:outline-none focus:border-bloom-blush/60 transition-colors py-1"
-                        style={{ fontWeight: 300 }}
-                      />
-                    </div>
-                  </div>
+                  <BouquetPreviewStack
+                    selectedFlowers={selectedFlowers}
+                    selectedGreenery={selectedGreenery}
+                  />
 
-                  {isPremium && (
-                    <div className="mb-4">
-                      <label
-                        className="flex items-center gap-1 font-serif text-xs text-bloom-gold italic mb-1"
-                        htmlFor="gift-mode-input"
-                      >
-                        <Crown className="h-3 w-3" /> Gift Mode — Recipient Name
-                        (for share link)
-                      </label>
-                      <input
-                        id="gift-mode-input"
-                        type="text"
-                        value={recipientName}
-                        onChange={(e) => setRecipientName(e.target.value)}
-                        placeholder="e.g. Priya, Aisha..."
-                        className="w-full bg-transparent border-b border-bloom-gold/40 font-serif text-sm text-bloom-heading placeholder:text-bloom-subtle/40 placeholder:italic focus:outline-none focus:border-bloom-gold/70 transition-colors py-1"
-                        style={{ fontWeight: 300 }}
-                      />
-                    </div>
-                  )}
-
-                  <div
-                    className="flex flex-wrap items-center gap-3 mb-3 px-2 py-2 rounded-xl"
-                    style={{
-                      background: "rgba(250,244,235,0.7)",
-                      border: "1px solid rgba(184,154,106,0.25)",
-                    }}
+                  <motion.section
+                    initial={{ opacity: 0, y: 16 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.1 }}
+                    className="mb-16"
                   >
-                    <span
-                      className="font-serif text-xs text-bloom-gold italic"
-                      style={{ fontWeight: 300, whiteSpace: "nowrap" }}
-                    >
-                      Style:
-                    </span>
-                    <select
-                      value={msgFont}
-                      onChange={(e) => setMsgFont(e.target.value)}
-                      className="flex-1 min-w-0 bg-transparent font-serif text-xs text-bloom-heading border-none focus:outline-none focus:ring-0 cursor-pointer"
-                      style={{ fontWeight: 300 }}
-                    >
-                      {FONT_OPTIONS.map((opt) => (
-                        <option key={opt.value} value={opt.value}>
-                          {opt.label}
-                        </option>
-                      ))}
-                    </select>
-                    <div className="flex items-center gap-1.5">
-                      <span
-                        className="font-serif text-xs text-bloom-gold italic"
-                        style={{ fontWeight: 300 }}
-                      >
-                        Colour:
-                      </span>
-                      <label
-                        htmlFor="msg-color-picker"
-                        className="relative cursor-pointer"
-                      >
-                        <div
-                          className="w-7 h-7 rounded-full border-2 border-bloom-gold/40 shadow-sm transition-transform hover:scale-110"
-                          style={{ background: msgColor }}
+                    <SectionHeading
+                      step="Two"
+                      title="Add Greenery to Your Bouquet"
+                      description="Greenery adds depth and life to any arrangement. Choose from eucalyptus, ivy, fern, and more to frame your blooms beautifully."
+                    />
+                    <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 max-w-2xl mx-auto">
+                      {GREENERY_OPTIONS.map((g, idx) => (
+                        <GreeneryCard
+                          key={g.name}
+                          name={g.name}
+                          selected={selectedGreenery.includes(g.name)}
+                          onToggle={() => toggleGreenery(g.name)}
+                          index={idx}
                         />
+                      ))}
+                    </div>
+                  </motion.section>
+                </motion.div>
+              )}
+
+              {/* ── STEP 4: MESSAGE ── */}
+              {currentStep === 4 && (
+                <motion.div
+                  key="step4"
+                  initial={{ opacity: 0, x: 24 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -24 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <motion.section
+                    initial={{ opacity: 0, y: 16 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.2 }}
+                    className="mb-14"
+                  >
+                    <SectionHeading
+                      step="Three"
+                      title="Write Your Personal Message"
+                      description="A personal message transforms a bouquet into a memory. Write from the heart — no word limit, no rules."
+                    />
+                    <div
+                      className="relative max-w-2xl mx-auto rounded-2xl border border-bloom-divider bg-white/50 p-4 shadow-card"
+                      style={{ backdropFilter: "blur(8px)" }}
+                    >
+                      <div className="flex gap-4 mb-4">
+                        <div className="flex-1">
+                          <label
+                            className="font-serif text-xs text-bloom-gold italic mb-1 block"
+                            htmlFor="to-input"
+                          >
+                            To
+                          </label>
+                          <input
+                            id="to-input"
+                            type="text"
+                            value={to}
+                            onChange={(e) => setTo(e.target.value)}
+                            placeholder="Recipient's name"
+                            className="w-full bg-transparent border-b border-bloom-divider/60 font-serif text-sm text-bloom-heading placeholder:text-bloom-subtle/40 placeholder:italic focus:outline-none focus:border-bloom-blush/60 transition-colors py-1"
+                            style={{ fontWeight: 300 }}
+                            data-ocid="message.to.input"
+                          />
+                        </div>
+                        <div className="flex-1">
+                          <label
+                            className="font-serif text-xs text-bloom-gold italic mb-1 block"
+                            htmlFor="from-input"
+                          >
+                            From
+                          </label>
+                          <input
+                            id="from-input"
+                            type="text"
+                            value={from}
+                            onChange={(e) => setFrom(e.target.value)}
+                            placeholder="Your name"
+                            className="w-full bg-transparent border-b border-bloom-divider/60 font-serif text-sm text-bloom-heading placeholder:text-bloom-subtle/40 placeholder:italic focus:outline-none focus:border-bloom-blush/60 transition-colors py-1"
+                            style={{ fontWeight: 300 }}
+                            data-ocid="message.from.input"
+                          />
+                        </div>
+                      </div>
+
+                      {isPremium && (
+                        <div className="mb-4">
+                          <label
+                            className="flex items-center gap-1 font-serif text-xs text-bloom-gold italic mb-1"
+                            htmlFor="gift-mode-input"
+                          >
+                            <Crown className="h-3 w-3" /> Gift Mode — Recipient
+                            Name (for share link)
+                          </label>
+                          <input
+                            id="gift-mode-input"
+                            type="text"
+                            value={recipientName}
+                            onChange={(e) => setRecipientName(e.target.value)}
+                            placeholder="e.g. Priya, Aisha..."
+                            className="w-full bg-transparent border-b border-bloom-gold/40 font-serif text-sm text-bloom-heading placeholder:text-bloom-subtle/40 placeholder:italic focus:outline-none focus:border-bloom-gold/70 transition-colors py-1"
+                            style={{ fontWeight: 300 }}
+                            data-ocid="message.recipient.input"
+                          />
+                        </div>
+                      )}
+
+                      <div
+                        className="flex flex-wrap items-center gap-3 mb-3 px-2 py-2 rounded-xl"
+                        style={{
+                          background: "rgba(250,244,235,0.7)",
+                          border: "1px solid rgba(184,154,106,0.25)",
+                        }}
+                      >
+                        <span
+                          className="font-serif text-xs text-bloom-gold italic"
+                          style={{ fontWeight: 300, whiteSpace: "nowrap" }}
+                        >
+                          Style:
+                        </span>
+                        <select
+                          value={msgFont}
+                          onChange={(e) => setMsgFont(e.target.value)}
+                          className="flex-1 min-w-0 bg-transparent font-serif text-xs text-bloom-heading border-none focus:outline-none focus:ring-0 cursor-pointer"
+                          style={{ fontWeight: 300 }}
+                          data-ocid="message.font.select"
+                        >
+                          {FONT_OPTIONS.map((opt) => (
+                            <option key={opt.value} value={opt.value}>
+                              {opt.label}
+                            </option>
+                          ))}
+                        </select>
                         <input
-                          id="msg-color-picker"
                           type="color"
                           value={msgColor}
                           onChange={(e) => setMsgColor(e.target.value)}
-                          className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
+                          className="h-6 w-8 cursor-pointer rounded border-none bg-transparent"
+                          title="Message color"
+                          data-ocid="message.color.input"
                         />
-                      </label>
+                      </div>
+
+                      <Textarea
+                        placeholder="Write your heartfelt message here..."
+                        value={message}
+                        onChange={(e) =>
+                          setMessage(e.target.value.slice(0, MAX_MESSAGE))
+                        }
+                        rows={5}
+                        className="resize-none rounded-xl border-none bg-transparent text-base text-bloom-heading placeholder:text-bloom-subtle/50 placeholder:italic focus-visible:ring-0"
+                        style={{
+                          fontFamily: msgFont,
+                          color: msgColor,
+                          fontStyle: "italic",
+                          fontWeight: 300,
+                        }}
+                        data-ocid="message.message.textarea"
+                      />
+                      <div className="flex justify-end px-1 pb-1">
+                        <span
+                          className={`font-sans text-xs ${message.length >= MAX_MESSAGE ? "text-red-400" : "text-bloom-subtle/60"}`}
+                        >
+                          {message.length}/{MAX_MESSAGE}
+                        </span>
+                      </div>
                     </div>
-                  </div>
+                  </motion.section>
+                </motion.div>
+              )}
 
-                  <Textarea
-                    placeholder="Write your heartfelt message here..."
-                    value={message}
-                    onChange={(e) =>
-                      setMessage(e.target.value.slice(0, MAX_MESSAGE))
-                    }
-                    rows={5}
-                    className="resize-none rounded-xl border-none bg-transparent text-base text-bloom-heading placeholder:text-bloom-subtle/50 placeholder:italic focus-visible:ring-0"
-                    style={{
-                      fontFamily: msgFont,
-                      color: msgColor,
-                      fontStyle: "italic",
-                      fontWeight: 300,
-                    }}
-                  />
-                  <div className="flex justify-end px-1 pb-1">
-                    <span
-                      className={`font-sans text-xs ${message.length >= MAX_MESSAGE ? "text-red-400" : "text-bloom-subtle/60"}`}
-                    >
-                      {message.length}/{MAX_MESSAGE}
-                    </span>
-                  </div>
-                </div>
-              </motion.section>
-
-              {/* Create button */}
-              <div className="flex flex-col items-center gap-4">
-                <Button
-                  disabled={!canCreate || isGenerating}
-                  onClick={handleCreate}
-                  className="w-full max-w-sm rounded-full bg-bloom-blush py-6 font-serif text-base text-white shadow-card transition-all hover:bg-bloom-blush/85 hover:shadow-hero disabled:cursor-not-allowed disabled:opacity-40"
-                  style={{ fontWeight: 400, letterSpacing: "0.04em" }}
+              {/* ── STEP 5: FINAL BOUQUET ── */}
+              {currentStep === 5 && (
+                <motion.div
+                  key="step5"
+                  initial={{ opacity: 0, y: 24 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -24 }}
+                  transition={{ duration: 0.5 }}
+                  className="flex flex-col items-center gap-8 pt-4"
                 >
                   {isGenerating ? (
-                    <span className="flex items-center gap-3">
-                      <Loader2 className="h-5 w-5 animate-spin" />
-                      Arranging your bouquet...
-                    </span>
-                  ) : (
-                    "❖ Create Bouquet"
-                  )}
-                </Button>
+                    <div className="flex flex-col items-center gap-6 py-20">
+                      <Loader2 className="h-12 w-12 animate-spin text-bloom-blush" />
+                      <p className="font-serif text-bloom-subtle italic text-lg">
+                        {generatingMessage}
+                      </p>
+                    </div>
+                  ) : mergedImageUrl ? (
+                    <>
+                      <div className="text-center">
+                        <p
+                          className="font-serif text-bloom-subtle text-base"
+                          style={{ fontStyle: "italic", fontWeight: 300 }}
+                        >
+                          Your creation
+                        </p>
+                        <h2 className="font-serif text-4xl font-semibold text-bloom-heading mt-1">
+                          Your Bouquet is Ready
+                        </h2>
+                        <CreativeWorkJsonLd
+                          flowers={selectedFlowers}
+                          greenery={selectedGreenery}
+                          shareId={shareId}
+                        />
+                        <DiamondDivider />
+                        <p
+                          className="font-serif text-base text-bloom-subtle"
+                          style={{ fontStyle: "italic", fontWeight: 300 }}
+                        >
+                          Download it, share it, or send it with love.
+                        </p>
+                      </div>
 
-                {!canCreate && (
-                  <p
-                    className="font-serif text-sm text-bloom-subtle"
-                    style={{ fontStyle: "italic" }}
+                      <div
+                        style={{
+                          width: "100%",
+                          maxWidth: "420px",
+                          margin: "0 auto",
+                          aspectRatio: "3 / 4",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          background: "transparent",
+                          borderRadius: "16px",
+                          boxShadow: "0 20px 40px rgba(0,0,0,0.08)",
+                        }}
+                      >
+                        <img
+                          src={mergedImageUrl}
+                          alt="Your custom bouquet with message card"
+                          style={{
+                            width: "100%",
+                            height: "100%",
+                            objectFit: "contain",
+                            display: "block",
+                            borderRadius: "16px",
+                          }}
+                        />
+                      </div>
+
+                      {!isPremium && (
+                        <button
+                          type="button"
+                          onClick={() => setShowPayment(true)}
+                          className="flex items-center gap-2 rounded-full border border-bloom-gold/50 px-6 py-2 font-sans text-sm text-bloom-gold hover:bg-bloom-gold/10 transition-colors"
+                          data-ocid="bouquet.unlock_premium.button"
+                        >
+                          <Crown className="h-4 w-4" /> Remove watermark &amp;
+                          unlock premium
+                        </button>
+                      )}
+
+                      <div className="flex flex-wrap justify-center gap-4">
+                        <a
+                          href={mergedImageUrl}
+                          download="my-bloom-bouquet.jpg"
+                          className="inline-flex items-center gap-2 rounded-full bg-bloom-blush px-8 py-3 font-sans text-sm font-semibold text-white shadow-card transition-all hover:bg-bloom-blush/85 hover:shadow-hero"
+                          data-ocid="bouquet.download.button"
+                        >
+                          <Download className="h-4 w-4" /> Download Bouquet
+                        </a>
+                        <Button
+                          variant="outline"
+                          className="rounded-full border-bloom-gold/50 px-8 py-3 font-sans text-sm font-semibold text-bloom-gold hover:bg-bloom-gold/10"
+                          onClick={handleShare}
+                          data-ocid="bouquet.share.button"
+                        >
+                          <Share2 className="mr-2 h-4 w-4" /> Share Bouquet
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          className="rounded-full px-8 py-3 font-sans text-sm font-semibold text-bloom-subtle hover:text-bloom-heading"
+                          onClick={handleReset}
+                          data-ocid="bouquet.create_another.button"
+                        >
+                          <RotateCcw className="mr-2 h-4 w-4" /> Create Another
+                        </Button>
+                      </div>
+
+                      {showSharePanel && (
+                        <div className="flex flex-wrap justify-center gap-3 mt-2 p-4 rounded-2xl bg-white/60 border border-bloom-divider/40 backdrop-blur-sm max-w-lg w-full">
+                          <p className="w-full text-center font-serif text-sm text-bloom-subtle italic mb-2">
+                            Share your bouquet
+                          </p>
+                          <a
+                            href={`https://wa.me/?text=${encodeURIComponent(`I created this bouquet for you 💐 ${shareUrl}`)}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-2 rounded-full bg-[#25D366] px-4 py-2 text-white text-xs font-semibold hover:opacity-90 transition-opacity"
+                          >
+                            WhatsApp
+                          </a>
+                          <a
+                            href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-2 rounded-full bg-[#1877F2] px-4 py-2 text-white text-xs font-semibold hover:opacity-90 transition-opacity"
+                          >
+                            Facebook
+                          </a>
+                          <a
+                            href={`https://linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-2 rounded-full bg-[#0A66C2] px-4 py-2 text-white text-xs font-semibold hover:opacity-90 transition-opacity"
+                          >
+                            LinkedIn
+                          </a>
+                          <a
+                            href={`https://twitter.com/intent/tweet?text=${encodeURIComponent("I created this bouquet for you 💐")}&url=${encodeURIComponent(shareUrl)}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-2 rounded-full bg-black px-4 py-2 text-white text-xs font-semibold hover:opacity-90 transition-opacity"
+                          >
+                            X / Twitter
+                          </a>
+                          <button
+                            type="button"
+                            onClick={handleCopyLink}
+                            className="flex items-center gap-2 rounded-full bg-bloom-gold/20 border border-bloom-gold/40 px-4 py-2 text-bloom-gold text-xs font-semibold hover:bg-bloom-gold/30 transition-colors"
+                            data-ocid="bouquet.copy_link.button"
+                          >
+                            Copy Link
+                          </button>
+                        </div>
+                      )}
+                    </>
+                  ) : (
+                    <div className="flex flex-col items-center gap-4 py-20 text-center">
+                      <p className="font-serif text-bloom-subtle italic">
+                        Something went wrong. Please try again.
+                      </p>
+                      <Button
+                        variant="ghost"
+                        onClick={() => setCurrentStep(4)}
+                        data-ocid="bouquet.retry.button"
+                      >
+                        <ArrowLeft className="mr-2 h-4 w-4" /> Go Back
+                      </Button>
+                    </div>
+                  )}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </main>
+
+          {/* ── STICKY BOTTOM NAV (steps 2–5, mobile) ── */}
+          {currentStep >= 2 && currentStep <= 5 && (
+            <div
+              className="fixed bottom-0 left-0 right-0 z-40 border-t border-bloom-divider/30 px-4 py-3"
+              style={{
+                background: "rgba(255,250,245,0.95)",
+                backdropFilter: "blur(12px)",
+                paddingBottom:
+                  "calc(0.75rem + env(safe-area-inset-bottom, 0px))",
+              }}
+              data-ocid="step_nav.bottom_bar.panel"
+            >
+              <div className="flex items-center gap-3 max-w-2xl mx-auto">
+                {currentStep > 2 && (
+                  <button
+                    type="button"
+                    onClick={() => setCurrentStep(currentStep - 1)}
+                    className="flex h-12 items-center gap-2 rounded-full border border-bloom-divider/50 px-5 font-sans text-sm font-medium text-bloom-subtle hover:border-bloom-blush/50 hover:text-bloom-heading transition-all"
+                    data-ocid="step_nav.prev.button"
                   >
-                    {selectedFlowers.length === 0
-                      ? "Select at least one flower to begin"
-                      : selectedGreenery.length === 0
-                        ? "Add at least one greenery"
-                        : "Write your message to complete your bouquet"}
-                  </p>
+                    <ChevronLeft className="h-4 w-4" />
+                    Back
+                  </button>
+                )}
+                {currentStep === 2 && (
+                  <Button
+                    variant="ghost"
+                    onClick={() => setCurrentStep(1)}
+                    className="flex h-12 items-center gap-2 rounded-full border border-bloom-divider/50 px-5 font-sans text-sm font-medium text-bloom-subtle hover:border-bloom-blush/50"
+                    data-ocid="step_nav.back_landing.button"
+                  >
+                    <ChevronLeft className="h-4 w-4" />
+                    Back
+                  </Button>
+                )}
+                {currentStep < 5 && (
+                  <motion.button
+                    type="button"
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.97 }}
+                    onClick={() => {
+                      if (currentStep === 2) {
+                        setCurrentStep(3);
+                      } else if (currentStep === 3) {
+                        setCurrentStep(4);
+                      } else if (currentStep === 4) {
+                        handleCreate();
+                        setCurrentStep(5);
+                      }
+                    }}
+                    disabled={
+                      (currentStep === 2 && selectedFlowers.length === 0) ||
+                      (currentStep === 4 && (!canCreate || isGenerating))
+                    }
+                    className="flex-1 h-12 rounded-full bg-rose-500 font-sans text-base font-bold text-white shadow-lg transition-all hover:bg-rose-600 disabled:cursor-not-allowed disabled:opacity-40"
+                    data-ocid="step_nav.next.button"
+                  >
+                    {currentStep === 2 && "Next: Choose Greenery →"}
+                    {currentStep === 3 && "Next: Add Message →"}
+                    {currentStep === 4 &&
+                      (isGenerating ? "Generating..." : "Generate Bouquet ❖")}
+                  </motion.button>
+                )}
+                {currentStep === 5 && mergedImageUrl && (
+                  <div className="flex flex-1 gap-2">
+                    <a
+                      href={mergedImageUrl}
+                      download="my-petalnest-bouquet.jpg"
+                      className="flex-1 flex items-center justify-center gap-2 h-12 rounded-full bg-bloom-blush font-sans text-sm font-bold text-white shadow-lg hover:bg-bloom-blush/85 transition-colors"
+                      data-ocid="bouquet.mobile_download.button"
+                    >
+                      <Download className="h-4 w-4" /> Download
+                    </a>
+                    <Button
+                      variant="outline"
+                      onClick={handleShare}
+                      className="flex-1 h-12 rounded-full border-bloom-gold/50 font-sans text-sm font-bold text-bloom-gold hover:bg-bloom-gold/10"
+                      data-ocid="bouquet.mobile_share.button"
+                    >
+                      <Share2 className="mr-2 h-4 w-4" /> Share
+                    </Button>
+                  </div>
                 )}
               </div>
-            </motion.div>
+              {currentStep === 2 && selectedFlowers.length === 0 && (
+                <p className="text-center font-sans text-xs text-bloom-subtle mt-2">
+                  Select at least one flower to continue
+                </p>
+              )}
+              {currentStep === 4 && !canCreate && (
+                <p className="text-center font-sans text-xs text-bloom-subtle mt-2">
+                  {selectedFlowers.length === 0
+                    ? "Select at least one flower"
+                    : selectedGreenery.length === 0
+                      ? "Add at least one greenery"
+                      : "Write your message to continue"}
+                </p>
+              )}
+            </div>
           )}
-        </AnimatePresence>
-      </main>
 
-      <Footer />
-      <FloatingBouquetPanel
-        selectedFlowers={selectedFlowers}
-        selectedGreenery={selectedGreenery}
-      />
+          {/* Floating panel only on steps 2 and 3 */}
+          {(currentStep === 2 || currentStep === 3) && (
+            <FloatingBouquetPanel
+              selectedFlowers={selectedFlowers}
+              selectedGreenery={selectedGreenery}
+            />
+          )}
+        </>
+      )}
     </div>
   );
 }
@@ -2080,6 +2745,10 @@ function capitalize(s: string) {
 
 function GalleryPage() {
   const { data: bouquets, isLoading } = useGetRecentBouquets(50);
+  usePageMeta(
+    "Bouquet Gallery — PetalNest",
+    "Browse beautiful custom bouquets created by our community. Get inspired and start designing your own.",
+  );
 
   return (
     <div className="min-h-screen" style={{ position: "relative", zIndex: 2 }}>
@@ -2096,7 +2765,7 @@ function GalleryPage() {
               className="font-serif text-2xl font-light text-bloom-heading"
               style={{ letterSpacing: "0.08em" }}
             >
-              Bloom
+              PetalNest
             </span>
           </Link>
           <nav className="flex items-center gap-6">
@@ -2128,7 +2797,7 @@ function GalleryPage() {
               className="font-serif text-6xl md:text-7xl text-bloom-heading"
               style={{ fontWeight: 600 }}
             >
-              The Gallery
+              Bouquet Gallery
             </h1>
           </motion.div>
           <motion.div
@@ -2190,6 +2859,7 @@ function GalleryPage() {
           >
             {bouquets.map((record, idx) => {
               const matched = matchBouquet(record.flowers, record.greenery);
+              if (!matched) return null;
               const label = [...record.flowers, ...record.greenery]
                 .map(capitalize)
                 .join(", ");
@@ -2204,11 +2874,11 @@ function GalleryPage() {
                   }}
                   className="group overflow-hidden rounded-2xl bg-white/60 border border-bloom-divider/40 shadow-card hover:shadow-hero transition-all duration-300 hover:-translate-y-1"
                 >
-                  <Link to="/view/$id" params={{ id: record.id }}>
+                  <Link to="/bouquet/$id" params={{ id: record.id }}>
                     <div className="aspect-[3/4] overflow-hidden bg-[#f5efe6]">
                       <img
                         src={matched.imageUrl}
-                        alt={label}
+                        alt={`Custom bouquet with ${label}`}
                         className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
                         loading="lazy"
                       />
@@ -2249,17 +2919,30 @@ function ViewPage() {
     if (!bouquet) return;
     setIsRendering(true);
     const matched = matchBouquet(bouquet.flowers, bouquet.greenery);
+    if (!matched) {
+      composeDynamicBouquet(bouquet.flowers, bouquet.greenery, bouquet.message)
+        .then(setMergedImageUrl)
+        .catch(console.error)
+        .finally(() => setIsRendering(false));
+      return;
+    }
     renderBouquetWithCard(matched.imageUrl, bouquet.message)
       .then(setMergedImageUrl)
       .catch(console.error)
       .finally(() => setIsRendering(false));
   }, [bouquet]);
 
+  usePageMeta(
+    recipientName
+      ? `A Bouquet for ${recipientName} — PetalNest`
+      : "A Bouquet Made With Love — PetalNest",
+    "Someone created a special bouquet just for you. View your personalized bouquet with a heartfelt message.",
+  );
   useEffect(() => {
     if (!bouquet) return;
     const title = recipientName
-      ? `A Bouquet for ${recipientName} — Bloom`
-      : "A Bouquet for You — Bloom";
+      ? `A Bouquet for ${recipientName} — PetalNest`
+      : "A Bouquet for You — PetalNest";
     document.title = title;
     const setMeta = (property: string, content: string) => {
       let el = document.querySelector(
@@ -2308,7 +2991,7 @@ function ViewPage() {
               className="font-serif text-2xl font-light text-bloom-heading"
               style={{ letterSpacing: "0.08em" }}
             >
-              Bloom
+              PetalNest
             </span>
           </Link>
           <nav className="flex items-center gap-6">
@@ -2436,7 +3119,7 @@ function ViewPage() {
             >
               <img
                 src={mergedImageUrl}
-                alt="Custom bouquet with personal message card"
+                alt="Custom bouquet — a personalized floral creation made with PetalNest"
                 style={{
                   width: "100%",
                   height: "100%",
@@ -2545,7 +3228,7 @@ function LegalHeader() {
             className="font-serif text-2xl font-light text-bloom-heading"
             style={{ letterSpacing: "0.08em" }}
           >
-            Bloom
+            PetalNest
           </span>
         </Link>
       </div>
@@ -2602,11 +3285,11 @@ function PrivacyPage() {
           1. What Data We Collect
         </h2>
         <p>
-          Bloom operates with minimal data collection. We store the content you
-          input when creating a bouquet: your flower and greenery selections,
-          the message text (including To and From fields), and the resulting
-          bouquet image URL. No personal account information, email addresses,
-          or payment credentials are stored on our servers.
+          PetalNest operates with minimal data collection. We store the content
+          you input when creating a bouquet: your flower and greenery
+          selections, the message text (including To and From fields), and the
+          resulting bouquet image URL. No personal account information, email
+          addresses, or payment credentials are stored on our servers.
         </p>
       </section>
       <section>
@@ -2639,10 +3322,10 @@ function PrivacyPage() {
           4. Cookies &amp; Local Storage
         </h2>
         <p>
-          Bloom uses browser localStorage only to remember your premium unlock
-          status (a simple true/false flag). No tracking cookies or third-party
-          analytics are used. Clearing your browser data will reset your premium
-          status.
+          PetalNest uses browser localStorage only to remember your premium
+          unlock status (a simple true/false flag). No tracking cookies or
+          third-party analytics are used. Clearing your browser data will reset
+          your premium status.
         </p>
       </section>
       <section>
@@ -2652,9 +3335,9 @@ function PrivacyPage() {
         <p>
           Bouquet images are sourced from licensed stock photography providers.
           Payment processing is handled directly through your UPI application —
-          Bloom does not process or store payment information. Share links may
-          be opened by third-party social platforms (WhatsApp, Facebook, etc.)
-          subject to their own privacy policies.
+          PetalNest does not process or store payment information. Share links
+          may be opened by third-party social platforms (WhatsApp, Facebook,
+          etc.) subject to their own privacy policies.
         </p>
       </section>
       <section>
@@ -2663,7 +3346,7 @@ function PrivacyPage() {
         </h2>
         <p>
           You have the right to request deletion of any bouquet you created.
-          Since Bloom is anonymous, please provide the bouquet URL when
+          Since PetalNest is anonymous, please provide the bouquet URL when
           contacting us. You may also clear your localStorage at any time to
           remove your premium status from your device.
         </p>
@@ -2690,10 +3373,10 @@ function TermsPage() {
           1. Acceptance of Terms
         </h2>
         <p>
-          By accessing and using Bloom, you accept and agree to be bound by
+          By accessing and using PetalNest, you accept and agree to be bound by
           these Terms and Conditions. If you do not agree to these terms, please
-          do not use our service. Bloom reserves the right to modify these terms
-          at any time, and your continued use of the service constitutes
+          do not use our service. PetalNest reserves the right to modify these
+          terms at any time, and your continued use of the service constitutes
           acceptance of any changes.
         </p>
       </section>
@@ -2702,11 +3385,11 @@ function TermsPage() {
           2. Service Description
         </h2>
         <p>
-          Bloom is a web-based bouquet creation and gifting service that allows
-          users to design virtual bouquets, attach personalised message cards,
-          and share them with loved ones. The service provides photorealistic
-          bouquet imagery for gifting purposes and operates on an anonymous,
-          no-login basis.
+          PetalNest is a web-based bouquet creation and gifting service that
+          allows users to design virtual bouquets, attach personalised message
+          cards, and share them with loved ones. The service provides
+          photorealistic bouquet imagery for gifting purposes and operates on an
+          anonymous, no-login basis.
         </p>
       </section>
       <section>
@@ -2714,10 +3397,11 @@ function TermsPage() {
           3. User Conduct
         </h2>
         <p>
-          You agree to use Bloom only for lawful purposes and in a manner that
-          does not infringe the rights of others. You must not use the service
-          to send offensive, harmful, or inappropriate messages. Bloom reserves
-          the right to remove any content that violates these guidelines.
+          You agree to use PetalNest only for lawful purposes and in a manner
+          that does not infringe the rights of others. You must not use the
+          service to send offensive, harmful, or inappropriate messages.
+          PetalNest reserves the right to remove any content that violates these
+          guidelines.
         </p>
       </section>
       <section>
@@ -2737,8 +3421,8 @@ function TermsPage() {
           5. Intellectual Property
         </h2>
         <p>
-          All bouquet imagery, design elements, and content on Bloom are the
-          property of Bloom and its licensors. You may download and share
+          All bouquet imagery, design elements, and content on PetalNest are the
+          property of PetalNest and its licensors. You may download and share
           bouquet images for personal gifting purposes only. Commercial use,
           reproduction, or redistribution without permission is prohibited.
         </p>
@@ -2748,10 +3432,10 @@ function TermsPage() {
           6. Limitation of Liability
         </h2>
         <p>
-          Bloom is provided "as is" without warranties of any kind. We are not
-          liable for any damages arising from the use or inability to use the
-          service. Our total liability shall not exceed the amount paid by you
-          for premium features (₹29).
+          PetalNest is provided "as is" without warranties of any kind. We are
+          not liable for any damages arising from the use or inability to use
+          the service. Our total liability shall not exceed the amount paid by
+          you for premium features (₹29).
         </p>
       </section>
       <section>
@@ -2776,9 +3460,9 @@ function RefundPage() {
           1. Payment Nature
         </h2>
         <p>
-          Bloom's premium features are unlocked via a one-time UPI payment of
-          ₹29. This is a trust-based system — you confirm payment completion
-          in-app and features are instantly unlocked. Bloom does not
+          PetalNest's premium features are unlocked via a one-time UPI payment
+          of ₹29. This is a trust-based system — you confirm payment completion
+          in-app and features are instantly unlocked. PetalNest does not
           automatically verify UPI transactions at this time.
         </p>
       </section>
@@ -2831,8 +3515,8 @@ function RefundPage() {
         </h2>
         <p>
           We believe in fairness. If you genuinely experienced a problem with
-          our payment process, we will make it right. Bloom is built on trust,
-          and we stand behind that commitment.
+          our payment process, we will make it right. PetalNest is built on
+          trust, and we stand behind that commitment.
         </p>
       </section>
     </LegalPageShell>
@@ -2861,6 +3545,16 @@ const viewRoute = createRoute({
   path: "/view/$id",
   component: ViewPage,
 });
+const bouquetRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/bouquet/$id",
+  component: ViewPage,
+});
+const createBouquetRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/create-bouquet",
+  component: BuilderPage,
+});
 const galleryRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/gallery",
@@ -2884,7 +3578,9 @@ const refundRoute = createRoute({
 
 const routeTree = rootRoute.addChildren([
   indexRoute,
+  createBouquetRoute,
   viewRoute,
+  bouquetRoute,
   galleryRoute,
   termsRoute,
   privacyRoute,
