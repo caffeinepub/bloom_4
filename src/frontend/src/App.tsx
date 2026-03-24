@@ -31,6 +31,7 @@ import { toast } from "sonner";
 import type { BouquetRecord } from "./backend.d";
 import {
   type BouquetEntry,
+  ELEGANT_FLOWERS,
   getClosestMatches,
   matchBouquet,
   renderBouquetWithCard,
@@ -1900,10 +1901,7 @@ function BuilderPage() {
     );
   }, []);
 
-  const canCreate =
-    selectedFlowers.length > 0 &&
-    selectedGreenery.length > 0 &&
-    message.trim().length > 0;
+  const canCreate = selectedFlowers.length > 0 && message.trim().length > 0;
 
   const handleCreate = async () => {
     if (!canCreate) return;
@@ -1945,6 +1943,17 @@ function BuilderPage() {
             : `Closest match: ${matchResult.entry.id}`
           : "No match found",
       );
+      const hasElegant = effectiveFlowers.some((f) =>
+        ELEGANT_FLOWERS.includes(f.toLowerCase()),
+      );
+      if (hasElegant) {
+        console.log(
+          "[PetalNest] Elegant flowers detected:",
+          effectiveFlowers.filter((f) =>
+            ELEGANT_FLOWERS.includes(f.toLowerCase()),
+          ),
+        );
+      }
 
       if (!matchResult) {
         toast.error("Please select at least one flower.");
@@ -2819,9 +2828,7 @@ function BuilderPage() {
                 <p className="text-center font-sans text-xs text-bloom-subtle mt-2">
                   {selectedFlowers.length === 0
                     ? "Select at least one flower"
-                    : selectedGreenery.length === 0
-                      ? "Add at least one greenery"
-                      : "Write your message to continue"}
+                    : "Write your message to continue"}
                 </p>
               )}
             </div>

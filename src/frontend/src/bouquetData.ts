@@ -69,6 +69,32 @@ const IMG = {
     "/assets/generated/bouquet-spring-cherry-orchid.dim_800x1067.jpg",
   sunflowerDahlia:
     "/assets/generated/bouquet-bold-sunflower-dahlia.dim_800x1067.jpg",
+  elegantOrchidSolo:
+    "/assets/generated/bouquet-elegant-orchid-solo.dim_800x1067.jpg",
+  elegantLilySolo:
+    "/assets/generated/bouquet-elegant-lily-solo.dim_800x1067.jpg",
+  elegantJasmineSolo:
+    "/assets/generated/bouquet-elegant-jasmine-solo.dim_800x1067.jpg",
+  elegantCarnationSolo:
+    "/assets/generated/bouquet-elegant-carnation-solo.dim_800x1067.jpg",
+  elegantFreesiaSolo:
+    "/assets/generated/bouquet-elegant-freesia-solo.dim_800x1067.jpg",
+  elegantLisianthus:
+    "/assets/generated/bouquet-elegant-lisianthus-solo.dim_800x1067.jpg",
+  elegantMagnoliaSolo:
+    "/assets/generated/bouquet-elegant-magnolia-solo.dim_800x1067.jpg",
+  elegantGardeniaSolo:
+    "/assets/generated/bouquet-elegant-gardenia-solo.dim_800x1067.jpg",
+  elegantOrchidEucalyptus:
+    "/assets/generated/bouquet-elegant-orchid-eucalyptus.dim_800x1067.jpg",
+  elegantLilyEucalyptus:
+    "/assets/generated/bouquet-elegant-lily-eucalyptus.dim_800x1067.jpg",
+  elegantJasmineGardenia:
+    "/assets/generated/bouquet-elegant-jasmine-gardenia.dim_800x1067.jpg",
+  elegantFreesiaLisianthus:
+    "/assets/generated/bouquet-elegant-freesia-lisianthus.dim_800x1067.jpg",
+  elegantOrchidLily:
+    "/assets/generated/bouquet-elegant-orchid-lily.dim_800x1067.jpg",
 };
 
 export const BOUQUET_LIBRARY: BouquetEntry[] = [
@@ -225,7 +251,7 @@ export const BOUQUET_LIBRARY: BouquetEntry[] = [
   // ── Lily + Orchid (5 variants)
   entry(
     "lo-01",
-    IMG.lilyOrchid,
+    IMG.elegantOrchidLily,
     ["lily", "orchid"],
     ["eucalyptus"],
     "white",
@@ -233,7 +259,7 @@ export const BOUQUET_LIBRARY: BouquetEntry[] = [
   ),
   entry(
     "lo-02",
-    IMG.lilyOrchid,
+    IMG.elegantOrchidLily,
     ["lily", "orchid"],
     ["ruscus"],
     "white",
@@ -241,16 +267,23 @@ export const BOUQUET_LIBRARY: BouquetEntry[] = [
   ),
   entry(
     "lo-03",
-    IMG.lilyOrchid,
+    IMG.elegantOrchidLily,
     ["lily", "orchid"],
     ["filler stems", "eucalyptus"],
     "white",
     "elegant",
   ),
-  entry("lo-04", IMG.lilyOrchid, ["orchid", "lily"], ["fern"], "white", "bold"),
+  entry(
+    "lo-04",
+    IMG.elegantOrchidLily,
+    ["orchid", "lily"],
+    ["fern"],
+    "white",
+    "elegant",
+  ),
   entry(
     "lo-05",
-    IMG.lilyOrchid,
+    IMG.elegantLilySolo,
     ["lily"],
     ["ruscus", "fern"],
     "white",
@@ -268,7 +301,7 @@ export const BOUQUET_LIBRARY: BouquetEntry[] = [
   ),
   entry(
     "ja-02",
-    IMG.whiteGardenia,
+    IMG.elegantJasmineGardenia,
     ["jasmine", "gardenia"],
     ["ruscus"],
     "white",
@@ -3366,33 +3399,47 @@ export const BOUQUET_LIBRARY: BouquetEntry[] = [
   entry("sda-04", IMG.sunflowerDahlia, ["dahlia"], [], "mixed", "bold"),
 
   // Lily solo
-  entry("sly-01", IMG.lilyOrchid, ["lily"], ["eucalyptus"], "white", "elegant"),
+  entry(
+    "sly-01",
+    IMG.elegantLilySolo,
+    ["lily"],
+    ["eucalyptus"],
+    "white",
+    "elegant",
+  ),
   entry(
     "sly-02",
-    IMG.lilyOrchid,
+    IMG.elegantLilySolo,
     ["lily"],
     ["filler stems"],
     "white",
     "elegant",
   ),
-  entry("sly-03", IMG.lilyOrchid, ["lily"], [], "white", "elegant"),
+  entry("sly-03", IMG.elegantLilySolo, ["lily"], [], "white", "elegant"),
 
   // Orchid solo
-  entry("sor-01", IMG.lilyOrchid, ["orchid"], ["ruscus"], "white", "elegant"),
+  entry(
+    "sor-01",
+    IMG.elegantOrchidSolo,
+    ["orchid"],
+    ["ruscus"],
+    "white",
+    "elegant",
+  ),
   entry(
     "sor-02",
-    IMG.lilyOrchid,
+    IMG.elegantOrchidEucalyptus,
     ["orchid"],
     ["eucalyptus"],
     "white",
     "elegant",
   ),
-  entry("sor-03", IMG.lilyOrchid, ["orchid"], [], "white", "elegant"),
+  entry("sor-03", IMG.elegantOrchidSolo, ["orchid"], [], "white", "elegant"),
 
   // Gardenia solo
   entry(
     "sga-01",
-    IMG.whiteGardenia,
+    IMG.elegantGardeniaSolo,
     ["gardenia"],
     ["ruscus"],
     "white",
@@ -3400,32 +3447,46 @@ export const BOUQUET_LIBRARY: BouquetEntry[] = [
   ),
   entry(
     "sga-02",
-    IMG.whiteGardenia,
+    IMG.elegantGardeniaSolo,
     ["gardenia"],
     ["eucalyptus"],
     "white",
     "elegant",
   ),
-  entry("sga-03", IMG.gardeniaHydrangea, ["gardenia"], [], "white", "elegant"),
+  entry(
+    "sga-03",
+    IMG.elegantGardeniaSolo,
+    ["gardenia"],
+    [],
+    "white",
+    "elegant",
+  ),
 
   // Carnation solo
   entry(
     "sca-01",
-    IMG.dahliaCarnation,
+    IMG.elegantCarnationSolo,
     ["carnation"],
     ["eucalyptus"],
-    "mixed",
-    "classic",
+    "pink",
+    "elegant",
   ),
   entry(
     "sca-02",
-    IMG.classicRoseCarnation,
+    IMG.elegantCarnationSolo,
     ["carnation"],
     ["fern"],
-    "mixed",
-    "classic",
+    "pink",
+    "elegant",
   ),
-  entry("sca-03", IMG.dahliaCarnation, ["carnation"], [], "mixed", "classic"),
+  entry(
+    "sca-03",
+    IMG.elegantCarnationSolo,
+    ["carnation"],
+    [],
+    "pink",
+    "elegant",
+  ),
 
   // Sunflower solo
   entry(
@@ -3625,35 +3686,49 @@ export const BOUQUET_LIBRARY: BouquetEntry[] = [
   // Freesia solo
   entry(
     "sfr-01",
-    IMG.whiteGardenia,
+    IMG.elegantFreesiaSolo,
     ["freesia"],
     ["filler stems"],
     "white",
     "elegant",
   ),
-  entry("sfr-02", IMG.whiteGardenia, ["freesia"], [], "white", "elegant"),
+  entry("sfr-02", IMG.elegantFreesiaSolo, ["freesia"], [], "white", "elegant"),
 
   // Lisianthus solo
   entry(
     "sls-01",
-    IMG.lilyOrchid,
+    IMG.elegantLisianthus,
     ["lisianthus"],
     ["ruscus"],
     "purple",
     "elegant",
   ),
-  entry("sls-02", IMG.lilyOrchid, ["lisianthus"], [], "purple", "elegant"),
+  entry(
+    "sls-02",
+    IMG.elegantLisianthus,
+    ["lisianthus"],
+    [],
+    "purple",
+    "elegant",
+  ),
 
   // Magnolia solo
   entry(
     "smg-01",
-    IMG.whiteGardenia,
+    IMG.elegantMagnoliaSolo,
     ["magnolia"],
     ["eucalyptus"],
     "white",
     "elegant",
   ),
-  entry("smg-02", IMG.whiteGardenia, ["magnolia"], [], "white", "elegant"),
+  entry(
+    "smg-02",
+    IMG.elegantMagnoliaSolo,
+    ["magnolia"],
+    [],
+    "white",
+    "elegant",
+  ),
 
   // Cosmos solo
   entry(
@@ -3680,13 +3755,13 @@ export const BOUQUET_LIBRARY: BouquetEntry[] = [
   // Jasmine solo (additional)
   entry(
     "sja-01",
-    IMG.whiteGardenia,
+    IMG.elegantJasmineSolo,
     ["jasmine"],
     ["eucalyptus"],
     "white",
     "elegant",
   ),
-  entry("sja-02", IMG.whiteGardenia, ["jasmine"], [], "white", "elegant"),
+  entry("sja-02", IMG.elegantJasmineSolo, ["jasmine"], [], "white", "elegant"),
 
   // Lotus solo
   entry(
@@ -3698,6 +3773,232 @@ export const BOUQUET_LIBRARY: BouquetEntry[] = [
     "elegant",
   ),
   entry("slo-02", IMG.lilyOrchid, ["lotus"], [], "white", "elegant"),
+
+  // ── Elegant Combos (dedicated images) ──────────────────────────────────
+  entry(
+    "el-c01",
+    IMG.elegantOrchidLily,
+    ["lily", "orchid"],
+    [],
+    "white",
+    "elegant",
+  ),
+  entry(
+    "el-c02",
+    IMG.elegantOrchidLily,
+    ["lily", "orchid"],
+    ["eucalyptus"],
+    "white",
+    "elegant",
+  ),
+  entry(
+    "el-c03",
+    IMG.elegantOrchidLily,
+    ["lily", "orchid"],
+    ["ruscus"],
+    "white",
+    "elegant",
+  ),
+  entry(
+    "el-c04",
+    IMG.elegantOrchidLily,
+    ["lily", "orchid"],
+    ["fern"],
+    "white",
+    "elegant",
+  ),
+  entry(
+    "el-c05",
+    IMG.elegantJasmineGardenia,
+    ["jasmine", "gardenia"],
+    [],
+    "white",
+    "elegant",
+  ),
+  entry(
+    "el-c06",
+    IMG.elegantJasmineGardenia,
+    ["jasmine", "gardenia"],
+    ["eucalyptus"],
+    "white",
+    "elegant",
+  ),
+  entry(
+    "el-c07",
+    IMG.elegantJasmineGardenia,
+    ["jasmine", "gardenia"],
+    ["ruscus"],
+    "white",
+    "elegant",
+  ),
+  entry(
+    "el-c08",
+    IMG.elegantFreesiaLisianthus,
+    ["freesia", "lisianthus"],
+    [],
+    "white",
+    "elegant",
+  ),
+  entry(
+    "el-c09",
+    IMG.elegantFreesiaLisianthus,
+    ["freesia", "lisianthus"],
+    ["eucalyptus"],
+    "white",
+    "elegant",
+  ),
+  entry(
+    "el-c10",
+    IMG.elegantFreesiaLisianthus,
+    ["freesia", "lisianthus"],
+    ["ruscus"],
+    "white",
+    "elegant",
+  ),
+  entry(
+    "el-c11",
+    IMG.elegantOrchidSolo,
+    ["orchid", "carnation"],
+    [],
+    "white",
+    "elegant",
+  ),
+  entry(
+    "el-c12",
+    IMG.elegantLilySolo,
+    ["lily", "carnation"],
+    [],
+    "white",
+    "elegant",
+  ),
+  entry(
+    "el-c13",
+    IMG.elegantOrchidSolo,
+    ["orchid", "magnolia"],
+    [],
+    "white",
+    "elegant",
+  ),
+  entry(
+    "el-c14",
+    IMG.elegantLilySolo,
+    ["lily", "magnolia"],
+    [],
+    "white",
+    "elegant",
+  ),
+  entry(
+    "el-c15",
+    IMG.elegantJasmineSolo,
+    ["jasmine", "lily"],
+    ["eucalyptus"],
+    "white",
+    "elegant",
+  ),
+  entry(
+    "el-c16",
+    IMG.elegantJasmineSolo,
+    ["jasmine", "orchid"],
+    ["eucalyptus"],
+    "white",
+    "elegant",
+  ),
+  entry(
+    "el-c17",
+    IMG.elegantCarnationSolo,
+    ["carnation", "freesia"],
+    [],
+    "pink",
+    "elegant",
+  ),
+  entry(
+    "el-c18",
+    IMG.elegantGardeniaSolo,
+    ["gardenia", "magnolia"],
+    [],
+    "white",
+    "elegant",
+  ),
+  entry(
+    "el-c19",
+    IMG.elegantOrchidLily,
+    ["orchid", "lily", "jasmine"],
+    [],
+    "white",
+    "elegant",
+  ),
+  entry(
+    "el-c20",
+    IMG.elegantOrchidLily,
+    ["orchid", "lily", "gardenia"],
+    [],
+    "white",
+    "elegant",
+  ),
+  entry(
+    "el-c21",
+    IMG.elegantOrchidSolo,
+    ["orchid"],
+    ["eucalyptus"],
+    "white",
+    "elegant",
+  ),
+  entry(
+    "el-c22",
+    IMG.elegantLilyEucalyptus,
+    ["lily"],
+    ["eucalyptus"],
+    "white",
+    "elegant",
+  ),
+  entry(
+    "el-c23",
+    IMG.elegantJasmineSolo,
+    ["jasmine"],
+    ["ruscus"],
+    "white",
+    "elegant",
+  ),
+  entry(
+    "el-c24",
+    IMG.elegantCarnationSolo,
+    ["carnation"],
+    ["eucalyptus"],
+    "pink",
+    "elegant",
+  ),
+  entry(
+    "el-c25",
+    IMG.elegantFreesiaSolo,
+    ["freesia"],
+    ["ruscus"],
+    "white",
+    "elegant",
+  ),
+  entry(
+    "el-c26",
+    IMG.elegantLisianthus,
+    ["lisianthus"],
+    ["eucalyptus"],
+    "purple",
+    "elegant",
+  ),
+  entry(
+    "el-c27",
+    IMG.elegantMagnoliaSolo,
+    ["magnolia"],
+    ["ruscus"],
+    "white",
+    "elegant",
+  ),
+  entry(
+    "el-c28",
+    IMG.elegantGardeniaSolo,
+    ["gardenia"],
+    ["fern"],
+    "white",
+    "elegant",
+  ),
 
   // Blue Delphinium solo
   entry(
@@ -4716,12 +5017,25 @@ export interface MatchResult {
   hint?: string;
 }
 
+export const ELEGANT_FLOWERS = [
+  "lily",
+  "orchid",
+  "gardenia",
+  "jasmine",
+  "carnation",
+  "freesia",
+  "lisianthus",
+  "magnolia",
+];
+
 /**
  * Matching strategy:
  * 1. EXACT match — same flowers AND same greenery
+ * 1b. ELEGANT-PRIORITY pass — if any Elegant flowers selected, score within elegant pool first
  * 2. CLOSEST SUBSET match — entry flowers/greenery must be a SUBSET of
  *    what the user selected (no extra/unselected items ever shown).
  *    Scored by: max matched flowers > max matched greenery > total tags.
+ * 2b. ELEGANT OVERLAP fallback — any elegant entry with at least one matching flower
  * 3. Fallback — entry with at least one matching flower (any greenery ignored)
  * 4. Absolute fallback — first library entry
  * Never returns null when flowers are selected.
@@ -4732,10 +5046,21 @@ export function matchBouquet(
 ): MatchResult | null {
   if (selectedFlowers.length === 0) return null;
 
+  console.log(
+    "[PetalNest] matchBouquet called with flowers:",
+    selectedFlowers,
+    "greenery:",
+    selectedGreenery,
+  );
+
   const normFlowers = selectedFlowers.map((f) => f.toLowerCase()).sort();
   const normGreenery = selectedGreenery.map((g) => g.toLowerCase()).sort();
   const flowerSet = new Set(normFlowers);
   const greenerySet = new Set(normGreenery);
+
+  const hasElegantSelection = normFlowers.some((f) =>
+    ELEGANT_FLOWERS.includes(f),
+  );
 
   // ── 1. EXACT match ──────────────────────────────────────────────────────
   for (const e of BOUQUET_LIBRARY) {
@@ -4747,15 +5072,64 @@ export function matchBouquet(
       eg.length === normGreenery.length &&
       eg.every((g, i) => g === normGreenery[i])
     ) {
+      console.log("[PetalNest] Exact match found:", e.id);
       return { entry: e, isExact: true };
     }
   }
 
-  // ── 2. CLOSEST SUBSET match ─────────────────────────────────────────────
-  // Entry flowers must all be in the user selection (no extras).
-  // Entry greenery must all be in the user selection (no extras).
+  // ── 1b. ELEGANT-PRIORITY PASS ───────────────────────────────────────────
+  if (hasElegantSelection) {
+    console.log(
+      "[PetalNest] No exact match found, trying Elegant priority pass...",
+    );
+    const elegantPool = BOUQUET_LIBRARY.filter((e) => e.styleTag === "elegant");
+    console.log(
+      "[PetalNest] Elegant priority pass triggered. Filtered pool size:",
+      elegantPool.length,
+    );
+
+    let elegantBest: BouquetEntry | null = null;
+    let elegantBestScore = -1;
+
+    for (const e of elegantPool) {
+      const ef = e.flowerTags.map((f) => f.toLowerCase());
+      const eg = e.greeneryTags.map((g) => g.toLowerCase());
+
+      const flowerOk = ef.length > 0 && ef.every((f) => flowerSet.has(f));
+      if (!flowerOk) continue;
+
+      const greeneryOk = eg.every((g) => greenerySet.has(g));
+      const flowerMatchCount = ef.filter((f) => flowerSet.has(f)).length;
+      const greeneryMatchCount = eg.filter((g) => greenerySet.has(g)).length;
+      const score =
+        flowerMatchCount * 1000 +
+        (greeneryOk ? greeneryMatchCount * 100 : greeneryMatchCount * 10) +
+        ef.length * 10 +
+        eg.length;
+
+      if (score > elegantBestScore) {
+        elegantBestScore = score;
+        elegantBest = e;
+      }
+    }
+
+    if (elegantBest) {
+      console.log("[PetalNest] Elegant priority match found:", elegantBest.id);
+      return {
+        entry: elegantBest,
+        isExact: false,
+        hint: "Close match based on your selection",
+      };
+    }
+  }
+
+  // ── 2. CLOSEST SUBSET match (global) ────────────────────────────────────
   let best: BouquetEntry | null = null;
   let bestScore = -1;
+  console.log(
+    "[PetalNest] Trying global subset match. Pool size:",
+    BOUQUET_LIBRARY.length,
+  );
 
   for (const e of BOUQUET_LIBRARY) {
     const ef = e.flowerTags.map((f) => f.toLowerCase());
@@ -4764,11 +5138,10 @@ export function matchBouquet(
     const flowerOk = ef.length > 0 && ef.every((f) => flowerSet.has(f));
     const greeneryOk = eg.every((g) => greenerySet.has(g));
 
-    if (!flowerOk) continue; // has flowers not in selection — skip
+    if (!flowerOk) continue;
 
     const flowerMatchCount = ef.filter((f) => flowerSet.has(f)).length;
     const greeneryMatchCount = eg.filter((g) => greenerySet.has(g)).length;
-    // Score: matched flowers weighted highest, then greenery, then total size for completeness
     const score =
       flowerMatchCount * 1000 +
       (greeneryOk ? greeneryMatchCount * 100 : greeneryMatchCount * 10) +
@@ -4787,6 +5160,39 @@ export function matchBouquet(
       isExact: false,
       hint: "Close match based on your selection",
     };
+  }
+
+  // ── 2b. ELEGANT OVERLAP fallback ────────────────────────────────────────
+  if (hasElegantSelection) {
+    console.warn(
+      "[PetalNest] Elegant fallback triggered — using first solo Elegant entry for:",
+      normFlowers,
+    );
+    const elegantOverlap = BOUQUET_LIBRARY.filter((e) => {
+      if (e.styleTag !== "elegant") return false;
+      const ef = e.flowerTags.map((f) => f.toLowerCase());
+      return ef.some((f) => flowerSet.has(f));
+    });
+
+    if (elegantOverlap.length > 0) {
+      // Pick the one with the most overlap
+      let overlapBest = elegantOverlap[0];
+      let overlapBestCount = 0;
+      for (const e of elegantOverlap) {
+        const count = e.flowerTags.filter((f) =>
+          flowerSet.has(f.toLowerCase()),
+        ).length;
+        if (count > overlapBestCount) {
+          overlapBestCount = count;
+          overlapBest = e;
+        }
+      }
+      return {
+        entry: overlapBest,
+        isExact: false,
+        hint: "Close match based on your selection",
+      };
+    }
   }
 
   // ── 3. Fallback — at least one matching flower ───────────────────────────
