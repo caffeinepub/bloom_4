@@ -16,6 +16,15 @@ actor {
     timestamp : Int;
   };
 
+  // Gallery-safe record — no private message field
+  type GalleryRecord = {
+    id : Text;
+    flowers : [Text];
+    greenery : [Text];
+    imageKey : Text;
+    timestamp : Int;
+  };
+
   module BouquetRecord {
     public func compareByTimestampDesc(a : BouquetRecord, b : BouquetRecord) : Order.Order {
       Int.compare(b.timestamp, a.timestamp);
@@ -26,7 +35,7 @@ actor {
 
   var nextId = 0;
 
-  public shared ({ caller }) func createBouquet(flowers : [Text], greenery : [Text], message : Text, imageKey : Text) : async Text {
+  public shared ({ caller = _ }) func createBouquet(flowers : [Text], greenery : [Text], message : Text, imageKey : Text) : async Text {
     let id = nextId.toText();
     nextId += 1;
 
@@ -43,15 +52,28 @@ actor {
     id;
   };
 
-  public query ({ caller }) func getBouquet(id : Text) : async ?BouquetRecord {
+  public query ({ caller = _ }) func getBouquet(id : Text) : async ?BouquetRecord {
     bouquets.get(id);
   };
 
-  public query ({ caller }) func getRecentBouquets(limit : Nat) : async [BouquetRecord] {
+  // Returns all fields including message — use only on private /view/{id} page
+  public query ({ caller = _ }) func getRecentBouquets(limit : Nat) : async [BouquetRecord] {
     if (limit == 0) { Runtime.trap("Limit must be greater than 0") };
 
     let sorted = bouquets.values().toArray().sort(BouquetRecord.compareByTimestampDesc);
     let takeLimit = if (limit > sorted.size()) { sorted.size() } else { limit };
     sorted.sliceToArray(0, takeLimit);
+  };
+
+  // Gallery-safe: returns records WITHOUT the private message field
+  public query ({ caller = _ }) func getGalleryBouquets(limit : Nat) : async [GalleryRecord] {
+    if (limit == 0) { Runtime.trap("Limit must be greater than 0") };
+
+    let sorted = bouquets.values().toArray().sort(BouquetRecord.compareByTimestampDesc);
+    let takeLimit = if (limit > sorted.size()) { sorted.size() } else { limit };
+    let recent = sorted.sliceToArray(0, takeLimit);
+    recent.map(func(r : BouquetRecord) : GalleryRecord {
+      { id = r.id; flowers = r.flowers; greenery = r.greenery; imageKey = r.imageKey; timestamp = r.timestamp };
+    });
   };
 };

@@ -3241,6 +3241,1431 @@ export const BOUQUET_LIBRARY: BouquetEntry[] = [
     "purple",
     "bold",
   ),
+  // ── EXPANDED DATASET: Single-flower entries ──────────────────────────────
+
+  // Rose (Red) solo
+  entry(
+    "sr-01",
+    IMG.rosePeony,
+    ["rose (red)"],
+    ["eucalyptus"],
+    "red",
+    "romantic",
+  ),
+  entry("sr-02", IMG.rosePeony, ["rose (red)"], ["ruscus"], "red", "romantic"),
+  entry("sr-03", IMG.rosePeony, ["rose (red)"], ["fern"], "red", "romantic"),
+  entry(
+    "sr-04",
+    IMG.rosePeony,
+    ["rose (red)"],
+    ["filler stems"],
+    "red",
+    "romantic",
+  ),
+  entry("sr-05", IMG.rosePeony, ["rose (red)"], ["myrtle"], "red", "romantic"),
+  entry("sr-06", IMG.rosePeony, ["rose (red)"], [], "red", "romantic"),
+
+  // Rose (Pink) solo
+  entry(
+    "sp-01",
+    IMG.pinkRanunculus,
+    ["rose (pink)"],
+    ["eucalyptus"],
+    "pink",
+    "romantic",
+  ),
+  entry(
+    "sp-02",
+    IMG.pinkRanunculus,
+    ["rose (pink)"],
+    ["ruscus"],
+    "pink",
+    "romantic",
+  ),
+  entry(
+    "sp-03",
+    IMG.pinkRanunculus,
+    ["rose (pink)"],
+    ["fern"],
+    "pink",
+    "romantic",
+  ),
+  entry(
+    "sp-04",
+    IMG.pinkRanunculus,
+    ["rose (pink)"],
+    ["filler stems"],
+    "pink",
+    "soft",
+  ),
+  entry("sp-05", IMG.pinkRanunculus, ["rose (pink)"], [], "pink", "romantic"),
+
+  // Rose (White) solo
+  entry(
+    "sw-01",
+    IMG.whiteGardenia,
+    ["rose (white)"],
+    ["eucalyptus"],
+    "white",
+    "elegant",
+  ),
+  entry(
+    "sw-02",
+    IMG.whiteGardenia,
+    ["rose (white)"],
+    ["ruscus"],
+    "white",
+    "elegant",
+  ),
+  entry(
+    "sw-03",
+    IMG.whiteGardenia,
+    ["rose (white)"],
+    ["fern"],
+    "white",
+    "elegant",
+  ),
+  entry("sw-04", IMG.whiteGardenia, ["rose (white)"], [], "white", "elegant"),
+
+  // Peony solo
+  entry("spy-01", IMG.rosePeony, ["peony"], ["eucalyptus"], "pink", "romantic"),
+  entry("spy-02", IMG.rosePeony, ["peony"], ["ruscus"], "pink", "romantic"),
+  entry("spy-03", IMG.peonyTulip, ["peony"], ["fern"], "pink", "soft"),
+  entry("spy-04", IMG.rosePeony, ["peony"], [], "pink", "romantic"),
+
+  // Ranunculus solo
+  entry(
+    "sra-01",
+    IMG.pinkRanunculus,
+    ["ranunculus"],
+    ["eucalyptus"],
+    "pink",
+    "soft",
+  ),
+  entry(
+    "sra-02",
+    IMG.pinkRanunculus,
+    ["ranunculus"],
+    ["filler stems"],
+    "pink",
+    "soft",
+  ),
+  entry("sra-03", IMG.pinkRanunculus, ["ranunculus"], [], "pink", "soft"),
+
+  // Dahlia solo
+  entry(
+    "sda-01",
+    IMG.dahliaCarnation,
+    ["dahlia"],
+    ["eucalyptus"],
+    "mixed",
+    "bold",
+  ),
+  entry("sda-02", IMG.dahliaRose, ["dahlia"], ["ruscus"], "mixed", "bold"),
+  entry("sda-03", IMG.dahliaCarnation, ["dahlia"], ["fern"], "mixed", "bold"),
+  entry("sda-04", IMG.sunflowerDahlia, ["dahlia"], [], "mixed", "bold"),
+
+  // Lily solo
+  entry("sly-01", IMG.lilyOrchid, ["lily"], ["eucalyptus"], "white", "elegant"),
+  entry(
+    "sly-02",
+    IMG.lilyOrchid,
+    ["lily"],
+    ["filler stems"],
+    "white",
+    "elegant",
+  ),
+  entry("sly-03", IMG.lilyOrchid, ["lily"], [], "white", "elegant"),
+
+  // Orchid solo
+  entry("sor-01", IMG.lilyOrchid, ["orchid"], ["ruscus"], "white", "elegant"),
+  entry(
+    "sor-02",
+    IMG.lilyOrchid,
+    ["orchid"],
+    ["eucalyptus"],
+    "white",
+    "elegant",
+  ),
+  entry("sor-03", IMG.lilyOrchid, ["orchid"], [], "white", "elegant"),
+
+  // Gardenia solo
+  entry(
+    "sga-01",
+    IMG.whiteGardenia,
+    ["gardenia"],
+    ["ruscus"],
+    "white",
+    "elegant",
+  ),
+  entry(
+    "sga-02",
+    IMG.whiteGardenia,
+    ["gardenia"],
+    ["eucalyptus"],
+    "white",
+    "elegant",
+  ),
+  entry("sga-03", IMG.gardeniaHydrangea, ["gardenia"], [], "white", "elegant"),
+
+  // Carnation solo
+  entry(
+    "sca-01",
+    IMG.dahliaCarnation,
+    ["carnation"],
+    ["eucalyptus"],
+    "mixed",
+    "classic",
+  ),
+  entry(
+    "sca-02",
+    IMG.classicRoseCarnation,
+    ["carnation"],
+    ["fern"],
+    "mixed",
+    "classic",
+  ),
+  entry("sca-03", IMG.dahliaCarnation, ["carnation"], [], "mixed", "classic"),
+
+  // Sunflower solo
+  entry(
+    "ssf-01",
+    IMG.sunflowerDaisy,
+    ["sunflower"],
+    ["filler stems"],
+    "yellow",
+    "bright",
+  ),
+  entry(
+    "ssf-02",
+    IMG.sunflowerDahlia,
+    ["sunflower"],
+    ["fern"],
+    "yellow",
+    "bright",
+  ),
+  entry("ssf-03", IMG.sunflowerDaisy, ["sunflower"], [], "yellow", "bright"),
+
+  // Daisy solo
+  entry(
+    "sdy-01",
+    IMG.sunflowerDaisy,
+    ["daisy"],
+    ["filler stems"],
+    "white",
+    "bright",
+  ),
+  entry("sdy-02", IMG.sunflowerDaisy, ["daisy"], [], "white", "bright"),
+
+  // Gerbera solo
+  entry(
+    "sge-01",
+    IMG.gerberaMarigold,
+    ["gerbera"],
+    ["fern"],
+    "mixed",
+    "bright",
+  ),
+  entry("sge-02", IMG.gerberaMarigold, ["gerbera"], [], "mixed", "bright"),
+
+  // Marigold solo
+  entry(
+    "sma-01",
+    IMG.gerberaMarigold,
+    ["marigold"],
+    ["filler stems"],
+    "yellow",
+    "bright",
+  ),
+  entry("sma-02", IMG.gerberaMarigold, ["marigold"], [], "yellow", "bright"),
+
+  // Tulip solo
+  entry(
+    "stu-01",
+    IMG.tulipBabysBreath,
+    ["tulip"],
+    ["eucalyptus"],
+    "mixed",
+    "soft",
+  ),
+  entry("stu-02", IMG.cherryTulip, ["tulip"], ["ruscus"], "mixed", "soft"),
+  entry("stu-03", IMG.peonyTulip, ["tulip"], ["fern"], "mixed", "soft"),
+  entry("stu-04", IMG.tulipBabysBreath, ["tulip"], [], "mixed", "soft"),
+
+  // Hydrangea solo
+  entry(
+    "shy-01",
+    IMG.hydrangeaBabys,
+    ["hydrangea"],
+    ["eucalyptus"],
+    "blue",
+    "wild",
+  ),
+  entry(
+    "shy-02",
+    IMG.gardeniaHydrangea,
+    ["hydrangea"],
+    ["ruscus"],
+    "blue",
+    "wild",
+  ),
+  entry("shy-03", IMG.lavenderHydrangea, ["hydrangea"], [], "blue", "wild"),
+
+  // Baby's Breath solo
+  entry(
+    "sbb-01",
+    IMG.tulipBabysBreath,
+    ["baby's breath"],
+    ["filler stems"],
+    "white",
+    "soft",
+  ),
+  entry("sbb-02", IMG.hydrangeaBabys, ["baby's breath"], [], "white", "soft"),
+
+  // Anemone solo
+  entry(
+    "san-01",
+    IMG.anemonePoppy,
+    ["anemone"],
+    ["eucalyptus"],
+    "mixed",
+    "wild",
+  ),
+  entry("san-02", IMG.anemonePoppy, ["anemone"], [], "mixed", "wild"),
+
+  // Lavender solo
+  entry(
+    "slv-01",
+    IMG.lavenderHydrangea,
+    ["lavender"],
+    ["fern"],
+    "purple",
+    "wild",
+  ),
+  entry("slv-02", IMG.lavenderHydrangea, ["lavender"], [], "purple", "wild"),
+
+  // Cherry Blossom solo
+  entry(
+    "scb-01",
+    IMG.cherryTulip,
+    ["cherry blossom"],
+    ["filler stems"],
+    "pink",
+    "soft",
+  ),
+  entry(
+    "scb-02",
+    IMG.cherryOrchid,
+    ["cherry blossom"],
+    ["ruscus"],
+    "pink",
+    "soft",
+  ),
+  entry("scb-03", IMG.cherryTulip, ["cherry blossom"], [], "pink", "soft"),
+
+  // Iris solo
+  entry("sir-01", IMG.anemonePoppy, ["iris"], ["eucalyptus"], "purple", "bold"),
+  entry("sir-02", IMG.anemonePoppy, ["iris"], [], "purple", "bold"),
+
+  // Protea solo
+  entry(
+    "spt-01",
+    IMG.anemonePoppy,
+    ["protea"],
+    ["eucalyptus"],
+    "mixed",
+    "bold",
+  ),
+  entry("spt-02", IMG.anemonePoppy, ["protea"], [], "mixed", "bold"),
+
+  // Wisteria solo
+  entry(
+    "swi-01",
+    IMG.lavenderHydrangea,
+    ["wisteria"],
+    ["fern"],
+    "purple",
+    "wild",
+  ),
+  entry("swi-02", IMG.lavenderHydrangea, ["wisteria"], [], "purple", "wild"),
+
+  // Poppy solo
+  entry(
+    "spo-01",
+    IMG.anemonePoppy,
+    ["poppy"],
+    ["filler stems"],
+    "mixed",
+    "bold",
+  ),
+  entry("spo-02", IMG.anemonePoppy, ["poppy"], [], "mixed", "bold"),
+
+  // Sweet Pea solo
+  entry(
+    "ssp-01",
+    IMG.pinkRanunculus,
+    ["sweet pea"],
+    ["filler stems"],
+    "pink",
+    "soft",
+  ),
+  entry("ssp-02", IMG.pinkRanunculus, ["sweet pea"], [], "pink", "soft"),
+
+  // Camellia solo
+  entry(
+    "scm-01",
+    IMG.whiteGardenia,
+    ["camellia"],
+    ["eucalyptus"],
+    "white",
+    "elegant",
+  ),
+  entry("scm-02", IMG.whiteGardenia, ["camellia"], [], "white", "elegant"),
+
+  // Freesia solo
+  entry(
+    "sfr-01",
+    IMG.whiteGardenia,
+    ["freesia"],
+    ["filler stems"],
+    "white",
+    "elegant",
+  ),
+  entry("sfr-02", IMG.whiteGardenia, ["freesia"], [], "white", "elegant"),
+
+  // Lisianthus solo
+  entry(
+    "sls-01",
+    IMG.lilyOrchid,
+    ["lisianthus"],
+    ["ruscus"],
+    "purple",
+    "elegant",
+  ),
+  entry("sls-02", IMG.lilyOrchid, ["lisianthus"], [], "purple", "elegant"),
+
+  // Magnolia solo
+  entry(
+    "smg-01",
+    IMG.whiteGardenia,
+    ["magnolia"],
+    ["eucalyptus"],
+    "white",
+    "elegant",
+  ),
+  entry("smg-02", IMG.whiteGardenia, ["magnolia"], [], "white", "elegant"),
+
+  // Cosmos solo
+  entry(
+    "sco-01",
+    IMG.gerberaMarigold,
+    ["cosmos"],
+    ["filler stems"],
+    "mixed",
+    "bright",
+  ),
+  entry("sco-02", IMG.gerberaMarigold, ["cosmos"], [], "mixed", "bright"),
+
+  // Snapdragon solo
+  entry(
+    "ssn-01",
+    IMG.gerberaMarigold,
+    ["snapdragon"],
+    ["fern"],
+    "mixed",
+    "bright",
+  ),
+  entry("ssn-02", IMG.gerberaMarigold, ["snapdragon"], [], "mixed", "bright"),
+
+  // Jasmine solo (additional)
+  entry(
+    "sja-01",
+    IMG.whiteGardenia,
+    ["jasmine"],
+    ["eucalyptus"],
+    "white",
+    "elegant",
+  ),
+  entry("sja-02", IMG.whiteGardenia, ["jasmine"], [], "white", "elegant"),
+
+  // Lotus solo
+  entry(
+    "slo-01",
+    IMG.lilyOrchid,
+    ["lotus"],
+    ["eucalyptus"],
+    "white",
+    "elegant",
+  ),
+  entry("slo-02", IMG.lilyOrchid, ["lotus"], [], "white", "elegant"),
+
+  // Blue Delphinium solo
+  entry(
+    "sbd-01",
+    IMG.lavenderHydrangea,
+    ["blue delphinium"],
+    ["eucalyptus"],
+    "purple",
+    "bold",
+  ),
+  entry(
+    "sbd-02",
+    IMG.lavenderHydrangea,
+    ["blue delphinium"],
+    [],
+    "purple",
+    "bold",
+  ),
+
+  // Black Dahlia solo
+  entry(
+    "sbk-01",
+    IMG.dahliaCarnation,
+    ["black dahlia"],
+    ["ruscus"],
+    "mixed",
+    "bold",
+  ),
+  entry("sbk-02", IMG.dahliaCarnation, ["black dahlia"], [], "mixed", "bold"),
+
+  // Hellebore solo
+  entry("she-01", IMG.anemonePoppy, ["hellebore"], ["fern"], "mixed", "wild"),
+  entry("she-02", IMG.anemonePoppy, ["hellebore"], [], "mixed", "wild"),
+
+  // Bleeding Heart solo
+  entry(
+    "sbh-01",
+    IMG.pinkRanunculus,
+    ["bleeding heart"],
+    ["filler stems"],
+    "pink",
+    "wild",
+  ),
+  entry("sbh-02", IMG.pinkRanunculus, ["bleeding heart"], [], "pink", "wild"),
+
+  // Chocolate Cosmos solo
+  entry(
+    "sch-01",
+    IMG.dahliaCarnation,
+    ["chocolate cosmos"],
+    ["eucalyptus"],
+    "mixed",
+    "bold",
+  ),
+  entry(
+    "sch-02",
+    IMG.dahliaCarnation,
+    ["chocolate cosmos"],
+    [],
+    "mixed",
+    "bold",
+  ),
+
+  // ── EXPANDED DATASET: 2-flower combinations ───────────────────────────────
+
+  entry(
+    "2f-01",
+    IMG.rosePeony,
+    ["rose (red)", "dahlia"],
+    ["eucalyptus"],
+    "red",
+    "romantic",
+  ),
+  entry(
+    "2f-02",
+    IMG.rosePeony,
+    ["rose (red)", "dahlia"],
+    ["ruscus"],
+    "red",
+    "romantic",
+  ),
+  entry(
+    "2f-03",
+    IMG.rosePeony,
+    ["rose (red)", "dahlia"],
+    [],
+    "red",
+    "romantic",
+  ),
+  entry(
+    "2f-04",
+    IMG.classicRoseCarnation,
+    ["rose (red)", "carnation"],
+    ["eucalyptus"],
+    "red",
+    "classic",
+  ),
+  entry(
+    "2f-05",
+    IMG.classicRoseCarnation,
+    ["rose (red)", "carnation"],
+    [],
+    "red",
+    "classic",
+  ),
+  entry(
+    "2f-06",
+    IMG.dahliaRose,
+    ["rose (red)", "lily"],
+    ["fern"],
+    "mixed",
+    "elegant",
+  ),
+  entry(
+    "2f-07",
+    IMG.dahliaRose,
+    ["rose (red)", "lily"],
+    [],
+    "mixed",
+    "elegant",
+  ),
+  entry(
+    "2f-08",
+    IMG.rosePeony,
+    ["rose (pink)", "ranunculus"],
+    ["eucalyptus"],
+    "pink",
+    "romantic",
+  ),
+  entry(
+    "2f-09",
+    IMG.rosePeony,
+    ["rose (pink)", "ranunculus"],
+    [],
+    "pink",
+    "romantic",
+  ),
+  entry(
+    "2f-10",
+    IMG.pinkRanunculus,
+    ["rose (pink)", "sweet pea"],
+    ["filler stems"],
+    "pink",
+    "soft",
+  ),
+  entry(
+    "2f-11",
+    IMG.pinkRanunculus,
+    ["rose (pink)", "sweet pea"],
+    [],
+    "pink",
+    "soft",
+  ),
+  entry(
+    "2f-12",
+    IMG.whiteGardenia,
+    ["rose (white)", "lily"],
+    ["eucalyptus"],
+    "white",
+    "elegant",
+  ),
+  entry(
+    "2f-13",
+    IMG.whiteGardenia,
+    ["rose (white)", "lily"],
+    [],
+    "white",
+    "elegant",
+  ),
+  entry(
+    "2f-14",
+    IMG.whiteGardenia,
+    ["rose (white)", "orchid"],
+    ["ruscus"],
+    "white",
+    "elegant",
+  ),
+  entry(
+    "2f-15",
+    IMG.whiteGardenia,
+    ["rose (white)", "orchid"],
+    [],
+    "white",
+    "elegant",
+  ),
+  entry(
+    "2f-16",
+    IMG.peonyTulip,
+    ["peony", "tulip"],
+    ["filler stems"],
+    "pink",
+    "soft",
+  ),
+  entry("2f-17", IMG.peonyTulip, ["peony", "tulip"], [], "pink", "soft"),
+  entry(
+    "2f-18",
+    IMG.gardeniaHydrangea,
+    ["hydrangea", "gardenia"],
+    ["eucalyptus"],
+    "white",
+    "elegant",
+  ),
+  entry(
+    "2f-19",
+    IMG.gardeniaHydrangea,
+    ["hydrangea", "gardenia"],
+    [],
+    "white",
+    "elegant",
+  ),
+  entry(
+    "2f-20",
+    IMG.sunflowerDaisy,
+    ["sunflower", "daisy"],
+    ["filler stems"],
+    "yellow",
+    "bright",
+  ),
+  entry(
+    "2f-21",
+    IMG.sunflowerDaisy,
+    ["sunflower", "daisy"],
+    [],
+    "yellow",
+    "bright",
+  ),
+  entry(
+    "2f-22",
+    IMG.sunflowerDahlia,
+    ["sunflower", "dahlia"],
+    ["fern"],
+    "yellow",
+    "bold",
+  ),
+  entry(
+    "2f-23",
+    IMG.sunflowerDahlia,
+    ["sunflower", "dahlia"],
+    [],
+    "yellow",
+    "bold",
+  ),
+  entry(
+    "2f-24",
+    IMG.gerberaMarigold,
+    ["gerbera", "marigold"],
+    ["eucalyptus"],
+    "mixed",
+    "bright",
+  ),
+  entry(
+    "2f-25",
+    IMG.gerberaMarigold,
+    ["gerbera", "marigold"],
+    [],
+    "mixed",
+    "bright",
+  ),
+  entry(
+    "2f-26",
+    IMG.gerberaMarigold,
+    ["gerbera", "cosmos"],
+    ["filler stems"],
+    "mixed",
+    "bright",
+  ),
+  entry(
+    "2f-27",
+    IMG.gerberaMarigold,
+    ["marigold", "snapdragon"],
+    ["fern"],
+    "mixed",
+    "bright",
+  ),
+  entry(
+    "2f-28",
+    IMG.tulipBabysBreath,
+    ["tulip", "baby's breath"],
+    ["eucalyptus"],
+    "pink",
+    "soft",
+  ),
+  entry(
+    "2f-29",
+    IMG.hydrangeaBabys,
+    ["hydrangea", "baby's breath"],
+    ["filler stems"],
+    "mixed",
+    "soft",
+  ),
+  entry(
+    "2f-30",
+    IMG.hydrangeaBabys,
+    ["hydrangea", "baby's breath"],
+    [],
+    "mixed",
+    "soft",
+  ),
+  entry(
+    "2f-31",
+    IMG.cherryTulip,
+    ["cherry blossom", "tulip"],
+    ["ruscus"],
+    "pink",
+    "soft",
+  ),
+  entry(
+    "2f-32",
+    IMG.cherryOrchid,
+    ["cherry blossom", "orchid"],
+    ["eucalyptus"],
+    "pink",
+    "elegant",
+  ),
+  entry(
+    "2f-33",
+    IMG.lavenderHydrangea,
+    ["lavender", "hydrangea"],
+    ["fern"],
+    "purple",
+    "wild",
+  ),
+  entry(
+    "2f-34",
+    IMG.lavenderHydrangea,
+    ["lavender", "wisteria"],
+    ["eucalyptus"],
+    "purple",
+    "wild",
+  ),
+  entry(
+    "2f-35",
+    IMG.anemonePoppy,
+    ["anemone", "iris"],
+    ["fern"],
+    "purple",
+    "wild",
+  ),
+  entry("2f-36", IMG.anemonePoppy, ["anemone", "iris"], [], "purple", "wild"),
+  entry(
+    "2f-37",
+    IMG.dahliaCarnation,
+    ["dahlia", "carnation"],
+    ["eucalyptus"],
+    "mixed",
+    "bold",
+  ),
+  entry(
+    "2f-38",
+    IMG.dahliaRose,
+    ["dahlia", "rose (red)"],
+    ["filler stems"],
+    "red",
+    "bold",
+  ),
+  entry(
+    "2f-39",
+    IMG.dahliaRose,
+    ["dahlia", "rose (pink)"],
+    ["ruscus"],
+    "pink",
+    "romantic",
+  ),
+  entry(
+    "2f-40",
+    IMG.classicRoseCarnation,
+    ["carnation", "freesia"],
+    ["filler stems"],
+    "mixed",
+    "classic",
+  ),
+  entry(
+    "2f-41",
+    IMG.lilyOrchid,
+    ["lily", "lisianthus"],
+    ["ruscus"],
+    "white",
+    "elegant",
+  ),
+  entry(
+    "2f-42",
+    IMG.lilyOrchid,
+    ["lily", "lisianthus"],
+    [],
+    "white",
+    "elegant",
+  ),
+  entry(
+    "2f-43",
+    IMG.whiteGardenia,
+    ["gardenia", "magnolia"],
+    ["eucalyptus"],
+    "white",
+    "elegant",
+  ),
+  entry(
+    "2f-44",
+    IMG.whiteGardenia,
+    ["jasmine", "camellia"],
+    ["filler stems"],
+    "white",
+    "elegant",
+  ),
+  entry(
+    "2f-45",
+    IMG.pinkRanunculus,
+    ["ranunculus", "sweet pea"],
+    ["filler stems"],
+    "pink",
+    "soft",
+  ),
+  entry(
+    "2f-46",
+    IMG.pinkRanunculus,
+    ["ranunculus", "camellia"],
+    ["ruscus"],
+    "pink",
+    "romantic",
+  ),
+  entry(
+    "2f-47",
+    IMG.lilyOrchid,
+    ["lotus", "orchid"],
+    ["eucalyptus"],
+    "white",
+    "elegant",
+  ),
+  entry(
+    "2f-48",
+    IMG.lavenderHydrangea,
+    ["blue delphinium", "iris"],
+    ["fern"],
+    "purple",
+    "bold",
+  ),
+  entry(
+    "2f-49",
+    IMG.dahliaCarnation,
+    ["black dahlia", "dahlia"],
+    ["ruscus"],
+    "mixed",
+    "bold",
+  ),
+  entry(
+    "2f-50",
+    IMG.anemonePoppy,
+    ["hellebore", "anemone"],
+    ["eucalyptus"],
+    "mixed",
+    "wild",
+  ),
+
+  // ── EXPANDED DATASET: 3-flower combinations ───────────────────────────────
+
+  entry(
+    "3f-01",
+    IMG.gardenRosePeony,
+    ["rose (red)", "peony", "ranunculus"],
+    ["eucalyptus"],
+    "pink",
+    "romantic",
+  ),
+  entry(
+    "3f-02",
+    IMG.gardenRosePeony,
+    ["rose (red)", "peony", "ranunculus"],
+    ["ruscus"],
+    "pink",
+    "romantic",
+  ),
+  entry(
+    "3f-03",
+    IMG.gardenRosePeony,
+    ["rose (red)", "peony", "ranunculus"],
+    [],
+    "pink",
+    "romantic",
+  ),
+  entry(
+    "3f-04",
+    IMG.rosePeony,
+    ["rose (red)", "rose (pink)", "ranunculus"],
+    ["eucalyptus"],
+    "mixed",
+    "romantic",
+  ),
+  entry(
+    "3f-05",
+    IMG.rosePeony,
+    ["rose (red)", "peony", "lily"],
+    ["fern"],
+    "mixed",
+    "elegant",
+  ),
+  entry(
+    "3f-06",
+    IMG.dahliaRose,
+    ["rose (red)", "dahlia", "carnation"],
+    ["eucalyptus"],
+    "red",
+    "bold",
+  ),
+  entry(
+    "3f-07",
+    IMG.classicRoseCarnation,
+    ["rose (pink)", "carnation", "sweet pea"],
+    ["filler stems"],
+    "pink",
+    "soft",
+  ),
+  entry(
+    "3f-08",
+    IMG.whiteGardenia,
+    ["rose (white)", "gardenia", "lily"],
+    ["eucalyptus"],
+    "white",
+    "elegant",
+  ),
+  entry(
+    "3f-09",
+    IMG.whiteGardenia,
+    ["rose (white)", "gardenia", "orchid"],
+    ["ruscus"],
+    "white",
+    "elegant",
+  ),
+  entry(
+    "3f-10",
+    IMG.pinkRanunculus,
+    ["rose (pink)", "ranunculus", "sweet pea"],
+    ["eucalyptus"],
+    "pink",
+    "romantic",
+  ),
+  entry(
+    "3f-11",
+    IMG.pinkRanunculus,
+    ["rose (pink)", "ranunculus", "camellia"],
+    ["filler stems"],
+    "pink",
+    "soft",
+  ),
+  entry(
+    "3f-12",
+    IMG.lilyOrchid,
+    ["lily", "orchid", "gardenia"],
+    ["eucalyptus"],
+    "white",
+    "elegant",
+  ),
+  entry(
+    "3f-13",
+    IMG.lilyOrchid,
+    ["lily", "orchid", "lisianthus"],
+    ["ruscus"],
+    "white",
+    "elegant",
+  ),
+  entry(
+    "3f-14",
+    IMG.sunflowerDaisy,
+    ["sunflower", "daisy", "gerbera"],
+    ["filler stems"],
+    "yellow",
+    "bright",
+  ),
+  entry(
+    "3f-15",
+    IMG.sunflowerDahlia,
+    ["sunflower", "dahlia", "marigold"],
+    ["fern"],
+    "yellow",
+    "bold",
+  ),
+  entry(
+    "3f-16",
+    IMG.gerberaMarigold,
+    ["gerbera", "marigold", "snapdragon"],
+    ["eucalyptus"],
+    "mixed",
+    "bright",
+  ),
+  entry(
+    "3f-17",
+    IMG.gerberaMarigold,
+    ["gerbera", "cosmos", "snapdragon"],
+    ["filler stems"],
+    "mixed",
+    "bright",
+  ),
+  entry(
+    "3f-18",
+    IMG.tulipBabysBreath,
+    ["tulip", "baby's breath", "hydrangea"],
+    ["eucalyptus"],
+    "pink",
+    "soft",
+  ),
+  entry(
+    "3f-19",
+    IMG.peonyTulip,
+    ["peony", "tulip", "ranunculus"],
+    ["fern"],
+    "pink",
+    "soft",
+  ),
+  entry(
+    "3f-20",
+    IMG.cherryTulip,
+    ["cherry blossom", "tulip", "peony"],
+    ["ruscus"],
+    "pink",
+    "soft",
+  ),
+  entry(
+    "3f-21",
+    IMG.cherryOrchid,
+    ["cherry blossom", "orchid", "lily"],
+    ["eucalyptus"],
+    "pink",
+    "elegant",
+  ),
+  entry(
+    "3f-22",
+    IMG.lavenderHydrangea,
+    ["lavender", "hydrangea", "wisteria"],
+    ["fern"],
+    "purple",
+    "wild",
+  ),
+  entry(
+    "3f-23",
+    IMG.lavenderHydrangea,
+    ["lavender", "anemone", "iris"],
+    ["eucalyptus"],
+    "purple",
+    "wild",
+  ),
+  entry(
+    "3f-24",
+    IMG.anemonePoppy,
+    ["anemone", "poppy", "iris"],
+    ["fern"],
+    "mixed",
+    "wild",
+  ),
+  entry(
+    "3f-25",
+    IMG.dahliaCarnation,
+    ["dahlia", "carnation", "rose (red)"],
+    ["ruscus"],
+    "red",
+    "bold",
+  ),
+  entry(
+    "3f-26",
+    IMG.dahliaRose,
+    ["dahlia", "rose (red)", "peony"],
+    ["eucalyptus"],
+    "red",
+    "romantic",
+  ),
+  entry(
+    "3f-27",
+    IMG.gardeniaHydrangea,
+    ["gardenia", "hydrangea", "jasmine"],
+    ["eucalyptus"],
+    "white",
+    "elegant",
+  ),
+  entry(
+    "3f-28",
+    IMG.whiteGardenia,
+    ["jasmine", "camellia", "freesia"],
+    ["ruscus"],
+    "white",
+    "elegant",
+  ),
+  entry(
+    "3f-29",
+    IMG.lilyOrchid,
+    ["lotus", "orchid", "gardenia"],
+    ["ruscus"],
+    "white",
+    "elegant",
+  ),
+  entry(
+    "3f-30",
+    IMG.lavenderHydrangea,
+    ["blue delphinium", "iris", "lavender"],
+    ["fern"],
+    "purple",
+    "bold",
+  ),
+
+  // ── EXPANDED DATASET: 4-flower combinations ───────────────────────────────
+
+  entry(
+    "4f-01",
+    IMG.gardenRosePeony,
+    ["rose (red)", "peony", "ranunculus", "dahlia"],
+    ["eucalyptus"],
+    "mixed",
+    "romantic",
+  ),
+  entry(
+    "4f-02",
+    IMG.gardenRosePeony,
+    ["rose (red)", "rose (pink)", "peony", "ranunculus"],
+    ["ruscus"],
+    "mixed",
+    "romantic",
+  ),
+  entry(
+    "4f-03",
+    IMG.rosePeony,
+    ["rose (red)", "peony", "lily", "orchid"],
+    ["eucalyptus"],
+    "mixed",
+    "elegant",
+  ),
+  entry(
+    "4f-04",
+    IMG.lilyOrchid,
+    ["lily", "orchid", "gardenia", "jasmine"],
+    ["eucalyptus"],
+    "white",
+    "elegant",
+  ),
+  entry(
+    "4f-05",
+    IMG.sunflowerDaisy,
+    ["sunflower", "daisy", "gerbera", "marigold"],
+    ["filler stems"],
+    "yellow",
+    "bright",
+  ),
+  entry(
+    "4f-06",
+    IMG.lavenderHydrangea,
+    ["lavender", "hydrangea", "wisteria", "anemone"],
+    ["fern"],
+    "purple",
+    "wild",
+  ),
+  entry(
+    "4f-07",
+    IMG.dahliaCarnation,
+    ["dahlia", "carnation", "rose (red)", "poppy"],
+    ["eucalyptus"],
+    "red",
+    "bold",
+  ),
+  entry(
+    "4f-08",
+    IMG.pinkRanunculus,
+    ["rose (pink)", "ranunculus", "sweet pea", "camellia"],
+    ["filler stems"],
+    "pink",
+    "soft",
+  ),
+  entry(
+    "4f-09",
+    IMG.cherryTulip,
+    ["cherry blossom", "tulip", "peony", "baby's breath"],
+    ["ruscus"],
+    "pink",
+    "soft",
+  ),
+  entry(
+    "4f-10",
+    IMG.anemonePoppy,
+    ["anemone", "poppy", "iris", "protea"],
+    ["eucalyptus"],
+    "mixed",
+    "wild",
+  ),
+
+  // ── EXPANDED DATASET: Greenery-focused combos (no greenery = bare / myrtle / salal / dusty / pittosporum) ──
+
+  entry(
+    "gf-01",
+    IMG.rosePeony,
+    ["rose (red)", "peony"],
+    ["myrtle"],
+    "red",
+    "romantic",
+  ),
+  entry(
+    "gf-02",
+    IMG.rosePeony,
+    ["rose (red)", "peony"],
+    ["salal"],
+    "red",
+    "romantic",
+  ),
+  entry(
+    "gf-03",
+    IMG.rosePeony,
+    ["rose (red)", "peony"],
+    ["dusty miller"],
+    "red",
+    "romantic",
+  ),
+  entry(
+    "gf-04",
+    IMG.rosePeony,
+    ["rose (red)", "peony"],
+    ["pittosporum"],
+    "red",
+    "romantic",
+  ),
+  entry(
+    "gf-05",
+    IMG.pinkRanunculus,
+    ["rose (pink)", "ranunculus"],
+    ["myrtle"],
+    "pink",
+    "romantic",
+  ),
+  entry(
+    "gf-06",
+    IMG.pinkRanunculus,
+    ["rose (pink)", "ranunculus"],
+    ["salal"],
+    "pink",
+    "romantic",
+  ),
+  entry(
+    "gf-07",
+    IMG.pinkRanunculus,
+    ["rose (pink)", "ranunculus"],
+    ["dusty miller"],
+    "pink",
+    "soft",
+  ),
+  entry(
+    "gf-08",
+    IMG.pinkRanunculus,
+    ["rose (pink)", "ranunculus"],
+    ["pittosporum"],
+    "pink",
+    "soft",
+  ),
+  entry(
+    "gf-09",
+    IMG.whiteGardenia,
+    ["gardenia", "rose (white)"],
+    ["myrtle"],
+    "white",
+    "elegant",
+  ),
+  entry(
+    "gf-10",
+    IMG.lilyOrchid,
+    ["lily", "orchid"],
+    ["myrtle"],
+    "white",
+    "elegant",
+  ),
+  entry(
+    "gf-11",
+    IMG.lilyOrchid,
+    ["lily", "orchid"],
+    ["salal"],
+    "white",
+    "elegant",
+  ),
+  entry(
+    "gf-12",
+    IMG.sunflowerDaisy,
+    ["sunflower", "daisy"],
+    ["salal"],
+    "yellow",
+    "bright",
+  ),
+  entry(
+    "gf-13",
+    IMG.lavenderHydrangea,
+    ["lavender", "hydrangea"],
+    ["dusty miller"],
+    "purple",
+    "wild",
+  ),
+  entry(
+    "gf-14",
+    IMG.tulipBabysBreath,
+    ["tulip", "baby's breath"],
+    ["myrtle"],
+    "pink",
+    "soft",
+  ),
+  entry("gf-15", IMG.rosePeony, ["rose (red)"], ["myrtle"], "red", "romantic"),
+  entry("gf-16", IMG.rosePeony, ["rose (red)"], ["salal"], "red", "romantic"),
+  entry(
+    "gf-17",
+    IMG.rosePeony,
+    ["rose (red)"],
+    ["dusty miller"],
+    "red",
+    "romantic",
+  ),
+  entry(
+    "gf-18",
+    IMG.rosePeony,
+    ["rose (red)"],
+    ["pittosporum"],
+    "red",
+    "romantic",
+  ),
+  entry(
+    "gf-19",
+    IMG.pinkRanunculus,
+    ["rose (pink)"],
+    ["myrtle"],
+    "pink",
+    "soft",
+  ),
+  entry(
+    "gf-20",
+    IMG.pinkRanunculus,
+    ["rose (pink)"],
+    ["pittosporum"],
+    "pink",
+    "soft",
+  ),
+  entry(
+    "gf-21",
+    IMG.whiteGardenia,
+    ["rose (white)"],
+    ["myrtle"],
+    "white",
+    "elegant",
+  ),
+  entry(
+    "gf-22",
+    IMG.whiteGardenia,
+    ["rose (white)"],
+    ["salal"],
+    "white",
+    "elegant",
+  ),
+  entry("gf-23", IMG.lilyOrchid, ["lily"], ["myrtle"], "white", "elegant"),
+  entry(
+    "gf-24",
+    IMG.lilyOrchid,
+    ["orchid"],
+    ["pittosporum"],
+    "white",
+    "elegant",
+  ),
+  entry("gf-25", IMG.dahliaCarnation, ["dahlia"], ["salal"], "mixed", "bold"),
+  entry(
+    "gf-26",
+    IMG.sunflowerDaisy,
+    ["sunflower"],
+    ["myrtle"],
+    "yellow",
+    "bright",
+  ),
+  entry(
+    "gf-27",
+    IMG.gerberaMarigold,
+    ["gerbera"],
+    ["dusty miller"],
+    "mixed",
+    "bright",
+  ),
 ];
 
 const _COLOR_MAP: Record<string, string> = {
@@ -3284,379 +4709,134 @@ const _COLOR_MAP: Record<string, string> = {
   "chocolate cosmos": "mixed",
 };
 
+// ─── MATCH RESULT TYPE ────────────────────────────────────────────────────────
+export interface MatchResult {
+  entry: BouquetEntry;
+  isExact: boolean;
+  hint?: string;
+}
+
+/**
+ * Matching strategy:
+ * 1. EXACT match — same flowers AND same greenery
+ * 2. CLOSEST SUBSET match — entry flowers/greenery must be a SUBSET of
+ *    what the user selected (no extra/unselected items ever shown).
+ *    Scored by: max matched flowers > max matched greenery > total tags.
+ * 3. Fallback — entry with at least one matching flower (any greenery ignored)
+ * 4. Absolute fallback — first library entry
+ * Never returns null when flowers are selected.
+ */
 export function matchBouquet(
   selectedFlowers: string[],
   selectedGreenery: string[],
-): BouquetEntry | null {
+): MatchResult | null {
+  if (selectedFlowers.length === 0) return null;
+
   const normFlowers = selectedFlowers.map((f) => f.toLowerCase()).sort();
+  const normGreenery = selectedGreenery.map((g) => g.toLowerCase()).sort();
+  const flowerSet = new Set(normFlowers);
+  const greenerySet = new Set(normGreenery);
 
-  console.log("[PetalNest] Matching bouquet for:", {
-    flowers: normFlowers,
-    greenery: selectedGreenery,
-  });
-
-  // EXACT match: flowerTags must contain EXACTLY the same flowers (sorted, same count)
+  // ── 1. EXACT match ──────────────────────────────────────────────────────
   for (const e of BOUQUET_LIBRARY) {
-    const entryFlowers = e.flowerTags.map((f) => f.toLowerCase()).sort();
+    const ef = e.flowerTags.map((f) => f.toLowerCase()).sort();
+    const eg = e.greeneryTags.map((g) => g.toLowerCase()).sort();
     if (
-      entryFlowers.length === normFlowers.length &&
-      entryFlowers.every((f, i) => f === normFlowers[i])
+      ef.length === normFlowers.length &&
+      ef.every((f, i) => f === normFlowers[i]) &&
+      eg.length === normGreenery.length &&
+      eg.every((g, i) => g === normGreenery[i])
     ) {
-      console.log("[PetalNest] Exact match found:", e.id, entryFlowers);
-      return e;
+      return { entry: e, isExact: true };
     }
   }
 
-  console.warn(
-    "[PetalNest] No exact match found for:",
-    normFlowers,
-    "— falling back to dynamic composition",
-  );
-  return null;
+  // ── 2. CLOSEST SUBSET match ─────────────────────────────────────────────
+  // Entry flowers must all be in the user selection (no extras).
+  // Entry greenery must all be in the user selection (no extras).
+  let best: BouquetEntry | null = null;
+  let bestScore = -1;
+
+  for (const e of BOUQUET_LIBRARY) {
+    const ef = e.flowerTags.map((f) => f.toLowerCase());
+    const eg = e.greeneryTags.map((g) => g.toLowerCase());
+
+    const flowerOk = ef.length > 0 && ef.every((f) => flowerSet.has(f));
+    const greeneryOk = eg.every((g) => greenerySet.has(g));
+
+    if (!flowerOk) continue; // has flowers not in selection — skip
+
+    const flowerMatchCount = ef.filter((f) => flowerSet.has(f)).length;
+    const greeneryMatchCount = eg.filter((g) => greenerySet.has(g)).length;
+    // Score: matched flowers weighted highest, then greenery, then total size for completeness
+    const score =
+      flowerMatchCount * 1000 +
+      (greeneryOk ? greeneryMatchCount * 100 : greeneryMatchCount * 10) +
+      ef.length * 10 +
+      eg.length;
+
+    if (score > bestScore) {
+      bestScore = score;
+      best = e;
+    }
+  }
+
+  if (best) {
+    return {
+      entry: best,
+      isExact: false,
+      hint: "Close match based on your selection",
+    };
+  }
+
+  // ── 3. Fallback — at least one matching flower ───────────────────────────
+  for (const e of BOUQUET_LIBRARY) {
+    const ef = e.flowerTags.map((f) => f.toLowerCase());
+    if (ef.some((f) => flowerSet.has(f))) {
+      return {
+        entry: e,
+        isExact: false,
+        hint: "Close match based on your selection",
+      };
+    }
+  }
+
+  // ── 4. Absolute fallback ─────────────────────────────────────────────────
+  return {
+    entry: BOUQUET_LIBRARY[0],
+    isExact: false,
+    hint: "Close match based on your selection",
+  };
 }
 
-export async function composeDynamicBouquet(
+/**
+ * @deprecated Use matchBouquet which now always returns a closest match.
+ * Kept for backward compatibility.
+ */
+export function getClosestMatches(
   selectedFlowers: string[],
   selectedGreenery: string[],
-  message: string,
-  addWatermark = false,
-  msgFont = "Cormorant Garamond",
-  msgColor = "#3b2a1a",
-): Promise<string> {
-  const CANVAS_W = 2400;
-  const CANVAS_H = 3200;
-  const canvas = document.createElement("canvas");
-  canvas.width = CANVAS_W;
-  canvas.height = CANVAS_H;
-  const ctx = canvas.getContext("2d")!;
+  limit = 3,
+): BouquetEntry[] {
+  const normFlowers = selectedFlowers.map((f) => f.toLowerCase()).sort();
+  const normGreenery = selectedGreenery.map((g) => g.toLowerCase()).sort();
+  const flowerSet = new Set(normFlowers);
+  const greenerySet = new Set(normGreenery);
+  const seen = new Set<string>();
+  const results: BouquetEntry[] = [];
 
-  const bg = ctx.createLinearGradient(0, 0, 0, CANVAS_H);
-  bg.addColorStop(0, "#f9f3ec");
-  bg.addColorStop(1, "#f0e6d8");
-  ctx.fillStyle = bg;
-  ctx.fillRect(0, 0, CANVAS_W, CANVAS_H);
-
-  const loadImg = (src: string): Promise<HTMLImageElement> =>
-    new Promise((res, rej) => {
-      const img = new Image();
-      img.crossOrigin = "anonymous";
-      img.onload = () => res(img);
-      img.onerror = () => rej(new Error(`Failed to load ${src}`));
-      img.src = src;
-    });
-
-  const FLOWER_IMG_MAP: Record<string, string> = {
-    "rose (red)": "/assets/generated/flower-rose-red.dim_400x400.jpg",
-    "rose (pink)": "/assets/generated/flower-rose-pink.dim_400x400.jpg",
-    "rose (white)": "/assets/generated/flower-rose-white.dim_400x400.jpg",
-    peony: "/assets/generated/flower-peony.dim_400x400.jpg",
-    ranunculus: "/assets/generated/flower-ranunculus.dim_400x400.jpg",
-    dahlia: "/assets/generated/flower-dahlia.dim_400x400.jpg",
-    tulip: "/assets/generated/flower-tulip.dim_400x400.jpg",
-    lily: "/assets/generated/flower-lily.dim_400x400.jpg",
-    orchid: "/assets/generated/flower-orchid.dim_400x400.jpg",
-    gardenia: "/assets/generated/flower-gardenia.dim_400x400.jpg",
-    jasmine: "/assets/generated/flower-jasmine-elegant.dim_400x400.jpg",
-    carnation: "/assets/generated/flower-carnation.dim_400x400.jpg",
-    sunflower: "/assets/generated/flower-sunflower.dim_400x400.jpg",
-    daisy: "/assets/generated/flower-daisy.dim_400x400.jpg",
-    gerbera: "/assets/generated/flower-gerbera.dim_400x400.jpg",
-    marigold: "/assets/generated/flower-marigold.dim_400x400.jpg",
-    poppy: "/assets/generated/flower-poppy.dim_400x400.jpg",
-    anemone: "/assets/generated/flower-anemone.dim_400x400.jpg",
-    lavender: "/assets/generated/flower-lavender.dim_400x400.jpg",
-    hydrangea: "/assets/generated/flower-hydrangea.dim_400x400.jpg",
-    "baby's breath": "/assets/generated/flower-babysbreath.dim_400x400.jpg",
-    "cherry blossom": "/assets/generated/flower-cherryblossom.dim_400x400.jpg",
-    "sweet pea": "/assets/generated/flower-sweetpea.dim_400x400.jpg",
-    camellia: "/assets/generated/flower-camellia.dim_400x400.jpg",
-    freesia: "/assets/generated/flower-freesia.dim_400x400.jpg",
-    lisianthus: "/assets/generated/flower-lisianthus.dim_400x400.jpg",
-    magnolia: "/assets/generated/flower-magnolia.dim_400x400.jpg",
-    cosmos: "/assets/generated/flower-cosmos.dim_400x400.jpg",
-    snapdragon: "/assets/generated/flower-snapdragon.dim_400x400.jpg",
-    iris: "/assets/generated/flower-iris.dim_400x400.jpg",
-    wisteria: "/assets/generated/flower-wisteria.dim_400x400.jpg",
-    protea: "/assets/generated/flower-protea.dim_400x400.jpg",
-    lotus: "/assets/generated/flower-lotus.dim_400x400.jpg",
-    "black dahlia": "/assets/generated/flower-black-dahlia.dim_400x400.jpg",
-    "blue delphinium": "/assets/generated/flower-lotus.dim_400x400.jpg",
-    "bleeding heart": "/assets/generated/flower-bleeding-heart.dim_400x400.jpg",
-    hellebore: "/assets/generated/flower-hellebore.dim_400x400.jpg",
-    "chocolate cosmos":
-      "/assets/generated/flower-chocolate-cosmos.dim_400x400.jpg",
-  };
-
-  const GREENERY_IMG_MAP: Record<string, string> = {
-    eucalyptus: "/assets/generated/greenery-eucalyptus.dim_400x400.jpg",
-    ruscus: "/assets/generated/greenery-ruscus.dim_400x400.jpg",
-    fern: "/assets/generated/greenery-fern.dim_400x400.jpg",
-    "filler stems": "/assets/generated/greenery-fillerstems.dim_400x400.jpg",
-    myrtle: "/assets/generated/greenery-myrtle.dim_400x400.jpg",
-    salal: "/assets/generated/greenery-salal.dim_400x400.jpg",
-    "dusty miller": "/assets/generated/greenery-dustymiller.dim_400x400.jpg",
-    pittosporum: "/assets/generated/greenery-pittosporum.dim_400x400.jpg",
-  };
-
-  const cx = CANVAS_W / 2;
-  const bouquetCenterY = 1300;
-  const flowerSize = Math.max(
-    500,
-    Math.min(700, 1400 / Math.max(selectedFlowers.length, 1)),
-  );
-  const greenerySize = flowerSize * 0.9;
-
-  function getFlowerPositions(
-    n: number,
-  ): { x: number; y: number; angle: number }[] {
-    if (n === 1) return [{ x: cx, y: bouquetCenterY, angle: 0 }];
-    if (n === 2)
-      return [
-        { x: cx - flowerSize * 0.4, y: bouquetCenterY, angle: -0.1 },
-        { x: cx + flowerSize * 0.4, y: bouquetCenterY, angle: 0.1 },
-      ];
-    const positions: { x: number; y: number; angle: number }[] = [];
-    for (let i = 0; i < n; i++) {
-      const row = Math.floor(i / 3);
-      const col = i % 3;
-      const rowCount = Math.ceil(n / 3);
-      const rowPositions = Math.min(3, n - row * 3);
-      const xOffset = (col - (rowPositions - 1) / 2) * flowerSize * 0.75;
-      const yOffset = (row - (rowCount - 1) / 2) * flowerSize * 0.65;
-      positions.push({
-        x: cx + xOffset,
-        y: bouquetCenterY + yOffset,
-        angle: (i % 2 === 0 ? 1 : -1) * 0.08,
-      });
+  for (const e of BOUQUET_LIBRARY) {
+    if (results.length >= limit) break;
+    const ef = e.flowerTags.map((f) => f.toLowerCase());
+    const eg = e.greeneryTags.map((g) => g.toLowerCase());
+    const flowerOk = ef.every((f) => flowerSet.has(f));
+    const greeneryOk = eg.every((g) => greenerySet.has(g));
+    if (flowerOk && greeneryOk && !seen.has(e.imageUrl)) {
+      seen.add(e.imageUrl);
+      results.push(e);
     }
-    return positions;
   }
-
-  function getGreeneryPositions(
-    n: number,
-  ): { x: number; y: number; angle: number }[] {
-    if (n === 0) return [];
-    const positions: { x: number; y: number; angle: number }[] = [];
-    for (let i = 0; i < n; i++) {
-      const spread = Math.PI * 0.8;
-      const angle =
-        -Math.PI / 2 - spread / 2 + (spread / Math.max(n - 1, 1)) * i;
-      const r = flowerSize * 0.8;
-      positions.push({
-        x: cx + Math.cos(angle) * r,
-        y: bouquetCenterY + Math.sin(angle) * r * 0.6 + greenerySize * 0.3,
-        angle: angle + Math.PI / 2,
-      });
-    }
-    return positions;
-  }
-
-  function drawRotatedImage(
-    img: HTMLImageElement,
-    x: number,
-    y: number,
-    size: number,
-    rotAngle: number,
-    alpha = 1,
-  ) {
-    ctx.save();
-    ctx.globalAlpha = alpha;
-    ctx.translate(x, y);
-    ctx.rotate(rotAngle);
-    ctx.drawImage(img, -size / 2, -size / 2, size, size);
-    ctx.restore();
-  }
-
-  const flowerKeys = selectedFlowers.map((f) => f.toLowerCase());
-  const greeneryKeys = selectedGreenery.map((g) => g.toLowerCase());
-
-  const [flowerImgs, greeneryImgs] = await Promise.all([
-    Promise.all(
-      flowerKeys.map((k) =>
-        loadImg(
-          FLOWER_IMG_MAP[k] ||
-            "/assets/generated/flower-rose-red.dim_400x400.jpg",
-        ).catch(() => null),
-      ),
-    ),
-    Promise.all(
-      greeneryKeys.map((k) =>
-        loadImg(
-          GREENERY_IMG_MAP[k] ||
-            "/assets/generated/greenery-eucalyptus.dim_400x400.jpg",
-        ).catch(() => null),
-      ),
-    ),
-  ]);
-
-  const validGreenery = greeneryImgs.filter(Boolean) as HTMLImageElement[];
-  const validFlowers = flowerImgs.filter(Boolean) as HTMLImageElement[];
-
-  const greenPos = getGreeneryPositions(validGreenery.length);
-  validGreenery.forEach((img, i) => {
-    if (greenPos[i])
-      drawRotatedImage(
-        img,
-        greenPos[i].x,
-        greenPos[i].y,
-        greenerySize,
-        greenPos[i].angle,
-        0.85,
-      );
-  });
-
-  const flowerPos = getFlowerPositions(validFlowers.length);
-  validFlowers.forEach((img, i) => {
-    if (flowerPos[i])
-      drawRotatedImage(
-        img,
-        flowerPos[i].x,
-        flowerPos[i].y,
-        flowerSize,
-        flowerPos[i].angle,
-      );
-  });
-
-  const wrapTop = bouquetCenterY + flowerSize * 0.55;
-  const wrapBottom = CANVAS_H - 200;
-  const wrapTopW = flowerSize * (selectedFlowers.length > 3 ? 2.8 : 2.2);
-  const wrapBottomW = wrapTopW * 0.55;
-
-  ctx.save();
-  ctx.shadowColor = "rgba(0,0,0,0.18)";
-  ctx.shadowBlur = 60;
-  ctx.shadowOffsetY = 20;
-  const wrapGrad = ctx.createLinearGradient(
-    cx - wrapTopW / 2,
-    wrapTop,
-    cx + wrapTopW / 2,
-    wrapBottom,
-  );
-  wrapGrad.addColorStop(0, "#c8a97a");
-  wrapGrad.addColorStop(0.4, "#e0c89a");
-  wrapGrad.addColorStop(1, "#b8965c");
-  ctx.fillStyle = wrapGrad;
-  ctx.beginPath();
-  ctx.moveTo(cx - wrapTopW / 2, wrapTop);
-  ctx.lineTo(cx + wrapTopW / 2, wrapTop);
-  ctx.lineTo(cx + wrapBottomW / 2, wrapBottom);
-  ctx.lineTo(cx - wrapBottomW / 2, wrapBottom);
-  ctx.closePath();
-  ctx.fill();
-  ctx.restore();
-
-  ctx.save();
-  ctx.globalAlpha = 0.08;
-  ctx.strokeStyle = "#5a3a1a";
-  ctx.lineWidth = 3;
-  for (let y = wrapTop + 40; y < wrapBottom; y += 60) {
-    const progress = (y - wrapTop) / (wrapBottom - wrapTop);
-    const hw = (wrapTopW / 2) * (1 - progress) + (wrapBottomW / 2) * progress;
-    ctx.beginPath();
-    ctx.moveTo(cx - hw, y);
-    ctx.lineTo(cx + hw, y);
-    ctx.stroke();
-  }
-  ctx.restore();
-
-  const ribbonY = wrapTop + (wrapBottom - wrapTop) * 0.18;
-  const ribbonProgress = 0.18;
-  const ribbonHW =
-    (wrapTopW / 2) * (1 - ribbonProgress) + (wrapBottomW / 2) * ribbonProgress;
-  ctx.save();
-  ctx.fillStyle = "#c0587a";
-  ctx.fillRect(cx - ribbonHW, ribbonY - 22, ribbonHW * 2, 44);
-  const ribbonGrad = ctx.createLinearGradient(0, ribbonY - 22, 0, ribbonY + 22);
-  ribbonGrad.addColorStop(0, "rgba(255,255,255,0.3)");
-  ribbonGrad.addColorStop(1, "rgba(0,0,0,0.1)");
-  ctx.fillStyle = ribbonGrad;
-  ctx.fillRect(cx - ribbonHW, ribbonY - 22, ribbonHW * 2, 44);
-  ctx.restore();
-
-  if (addWatermark) {
-    ctx.save();
-    ctx.globalAlpha = 0.28;
-    ctx.font = "bold 56px Inter, sans-serif";
-    ctx.fillStyle = "#7a5c3a";
-    ctx.textAlign = "center";
-    ctx.fillText("Created with PetalNest 💐", CANVAS_W / 2, CANVAS_H - 80);
-    ctx.restore();
-  }
-
-  const parsed = parseMessage(message);
-  const toName = parsed.to;
-  const msgBody = parsed.body;
-
-  if (msgBody || toName) {
-    const cardW = 680;
-    const cardH = 520;
-    const cardX = CANVAS_W - cardW - 80;
-    const cardY = wrapTop - 60;
-
-    ctx.save();
-    ctx.translate(cardX + cardW / 2, cardY + cardH / 2);
-    ctx.rotate(0.03);
-
-    ctx.shadowColor = "rgba(0,0,0,0.18)";
-    ctx.shadowBlur = 40;
-    ctx.shadowOffsetX = 8;
-    ctx.shadowOffsetY = 12;
-
-    ctx.fillStyle = "#fdf8f2";
-    ctx.beginPath();
-    const r = 24;
-    const hw = cardW / 2;
-    const hh = cardH / 2;
-    ctx.moveTo(-hw + r, -hh);
-    ctx.lineTo(hw - r, -hh);
-    ctx.arcTo(hw, -hh, hw, -hh + r, r);
-    ctx.lineTo(hw, hh - r);
-    ctx.arcTo(hw, hh, hw - r, hh, r);
-    ctx.lineTo(-hw + r, hh);
-    ctx.arcTo(-hw, hh, -hw, hh - r, r);
-    ctx.lineTo(-hw, -hh + r);
-    ctx.arcTo(-hw, -hh, -hw + r, -hh, r);
-    ctx.closePath();
-    ctx.fill();
-
-    ctx.shadowColor = "transparent";
-    ctx.shadowBlur = 0;
-    ctx.strokeStyle = "rgba(180,140,100,0.3)";
-    ctx.lineWidth = 3;
-    ctx.stroke();
-
-    ctx.font = `italic 52px ${msgFont}, serif`;
-    ctx.fillStyle = msgColor;
-    ctx.textAlign = "center";
-
-    if (toName) ctx.fillText(`To: ${toName}`, 0, -hh + 80);
-
-    if (msgBody) {
-      const words = msgBody.split(" ");
-      const lines: string[] = [];
-      let line = "";
-      for (const word of words) {
-        const test = line ? `${line} ${word}` : word;
-        if (ctx.measureText(test).width > cardW - 80) {
-          lines.push(line);
-          line = word;
-        } else line = test;
-      }
-      if (line) lines.push(line);
-      const lineH = 64;
-      const startY = toName ? -hh + 170 : -hh + 100;
-      lines
-        .slice(0, 5)
-        .forEach((l, i) => ctx.fillText(l, 0, startY + i * lineH));
-    }
-
-    ctx.font = `italic 42px ${msgFont}, serif`;
-    ctx.fillStyle = "rgba(160,100,80,0.7)";
-    ctx.fillText("with love ♡", 0, hh - 60);
-    ctx.restore();
-  }
-
-  return canvas.toDataURL("image/jpeg", 0.96);
+  return results;
 }
 
 // ─── CANVAS UTILS ─────────────────────────────────────────────────────────────

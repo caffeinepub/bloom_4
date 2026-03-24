@@ -30,7 +30,8 @@ import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 import type { BouquetRecord } from "./backend.d";
 import {
-  composeDynamicBouquet,
+  type BouquetEntry,
+  getClosestMatches,
   matchBouquet,
   renderBouquetWithCard,
 } from "./bouquetData";
@@ -243,13 +244,21 @@ function useGetBouquet(id: string | undefined) {
   });
 }
 
-function useGetRecentBouquets(limit: number) {
+type GalleryRecord = {
+  id: string;
+  flowers: readonly string[];
+  greenery: readonly string[];
+  imageKey: string;
+  timestamp: bigint;
+};
+
+function useGetGalleryBouquets(limit: number) {
   const { actor, isFetching } = useActor();
-  return useQuery<BouquetRecord[]>({
-    queryKey: ["recentBouquets", limit],
+  return useQuery<GalleryRecord[]>({
+    queryKey: ["galleryBouquets", limit],
     queryFn: async () => {
       if (!actor) return [];
-      return actor.getRecentBouquets(BigInt(limit));
+      return (actor as any).getGalleryBouquets(BigInt(limit));
     },
     enabled: !!actor && !isFetching,
   });
@@ -1836,6 +1845,9 @@ function BuilderPage() {
   const [recipientName, setRecipientName] = useState("");
   const [mergedImageUrl, setMergedImageUrl] = useState<string | null>(null);
   const [shareId, setShareId] = useState<string | null>(null);
+  const [noMatch, setNoMatch] = useState(false);
+  const [closestMatches, setClosestMatches] = useState<BouquetEntry[]>([]);
+  const [closestMatchHint, setClosestMatchHint] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatingMessage, setGeneratingMessage] = useState(
     "Generating your bouquet...",
@@ -1919,7 +1931,7 @@ function BuilderPage() {
           effectiveFlowers = filtered;
         }
       }
-      const matched = matchBouquet(effectiveFlowers, selectedGreenery);
+      const matchResult = matchBouquet(effectiveFlowers, selectedGreenery);
       const encodedMessage = `TO:${to.trim()}||FROM:${from.trim()}||MSG:${message.trim()}`;
 
       // Debug logging
@@ -1927,47 +1939,45 @@ function BuilderPage() {
       console.log("[PetalNest] Selected greenery:", selectedGreenery);
       console.log(
         "[PetalNest] Match result:",
-        matched
-          ? `Exact match: ${matched.id}`
-          : "No exact match — using dynamic composition",
+        matchResult
+          ? matchResult.isExact
+            ? `Exact match: ${matchResult.entry.id}`
+            : `Closest match: ${matchResult.entry.id}`
+          : "No match found",
       );
 
-      let canvasDataUrl: string;
-      if (matched) {
-        setGeneratingMessage("Generating your bouquet...");
-        canvasDataUrl = await renderBouquetWithCard(
-          matched.imageUrl,
-          encodedMessage,
-          !isPremium,
-          msgFont,
-          msgColor,
-        );
-      } else {
-        setGeneratingMessage("Creating your perfect bouquet...");
-        canvasDataUrl = await composeDynamicBouquet(
-          effectiveFlowers,
-          selectedGreenery,
-          encodedMessage,
-          !isPremium,
-          msgFont,
-          msgColor,
-        );
+      if (!matchResult) {
+        toast.error("Please select at least one flower.");
+        setIsGenerating(false);
+        return;
       }
+
+      const matched = matchResult.entry;
+      setClosestMatchHint(
+        matchResult.isExact ? null : (matchResult.hint ?? null),
+      );
+
+      setGeneratingMessage("Generating your bouquet...");
+      const canvasDataUrl = await renderBouquetWithCard(
+        matched.imageUrl,
+        encodedMessage,
+        !isPremium,
+        msgFont,
+        msgColor,
+      );
 
       const backendResult = await createBouquet
         .mutateAsync({
           flowers: effectiveFlowers,
           greenery: selectedGreenery,
           message: encodedMessage,
-          imageKey: matched?.key ?? "dynamic",
+          imageKey: matched.key,
         })
         .catch(() => null);
 
-      const finalImageUrl = canvasDataUrl;
-      const finalShareId = backendResult as string | null;
-
-      setMergedImageUrl(finalImageUrl);
-      setShareId(finalShareId);
+      setMergedImageUrl(canvasDataUrl);
+      setShareId(backendResult as string | null);
+      setNoMatch(false);
     } catch (err) {
       console.error(err);
       toast.error("Something went wrong. Please try again.");
@@ -1987,6 +1997,8 @@ function BuilderPage() {
     setShareId(null);
     setShowSharePanel(false);
     setCurrentStep(1);
+    setNoMatch(false);
+    setClosestMatches([]);
   };
 
   const handleCopyLink = async () => {
@@ -2448,7 +2460,93 @@ function BuilderPage() {
               )}
 
               {/* ── STEP 5: FINAL BOUQUET ── */}
-              {currentStep === 5 && (
+              {currentStep === 5 && noMatch && (
+                <motion.div
+                  key="step5nomatch"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="flex flex-col items-center gap-8 py-12 text-center max-w-lg mx-auto"
+                >
+                  <div className="text-6xl">💐</div>
+                  <div>
+                    <h2
+                      className="font-serif text-2xl text-bloom-heading mb-3"
+                      style={{ fontWeight: 600 }}
+                    >
+                      This exact combination is not available yet
+                    </h2>
+                    <p className="font-sans text-sm text-bloom-subtle leading-relaxed">
+                      We don't have a bouquet image for this exact flower and
+                      greenery combination. Try a different combination, or pick
+                      one of these suggestions:
+                    </p>
+                  </div>
+
+                  {closestMatches.length > 0 && (
+                    <div className="w-full">
+                      <p className="font-serif text-sm text-bloom-subtle mb-4 italic">
+                        Closest available combinations:
+                      </p>
+                      <div className="grid grid-cols-3 gap-3">
+                        {closestMatches.map((entry) => {
+                          const label = [
+                            ...entry.flowerTags,
+                            ...entry.greeneryTags,
+                          ]
+                            .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
+                            .join(", ");
+                          return (
+                            <div
+                              key={entry.id}
+                              className="rounded-xl overflow-hidden border border-bloom-divider/40 bg-white/60 shadow-card"
+                            >
+                              <div className="aspect-[3/4] bg-[#f5efe6]">
+                                <img
+                                  src={entry.imageUrl}
+                                  alt={`Suggested bouquet: ${label}`}
+                                  className="w-full h-full object-contain"
+                                  loading="lazy"
+                                />
+                              </div>
+                              <p className="p-2 font-sans text-xs text-bloom-subtle text-center leading-tight">
+                                {label}
+                              </p>
+                            </div>
+                          );
+                        })}
+                      </div>
+                      <p className="font-sans text-xs text-bloom-subtle/60 mt-3 italic">
+                        These are suggestions only — not auto-selected.
+                      </p>
+                    </div>
+                  )}
+
+                  <div className="flex flex-col sm:flex-row gap-3 w-full justify-center">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setNoMatch(false);
+                        setCurrentStep(2);
+                      }}
+                      className="rounded-full bg-bloom-blush px-8 py-3 font-sans text-sm font-bold text-white shadow-card hover:bg-bloom-blush/85 transition-all"
+                      data-ocid="bouquet.try_again.button"
+                    >
+                      Try a Different Combination
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleReset}
+                      className="rounded-full border border-bloom-divider px-8 py-3 font-sans text-sm font-semibold text-bloom-subtle hover:text-bloom-heading transition-all"
+                      data-ocid="bouquet.start_over.button"
+                    >
+                      Start Over
+                    </button>
+                  </div>
+                </motion.div>
+              )}
+
+              {/* ── STEP 5: FINAL BOUQUET ── */}
+              {currentStep === 5 && !noMatch && (
                 <motion.div
                   key="step5"
                   initial={{ opacity: 0, y: 24 }}
@@ -2482,6 +2580,11 @@ function BuilderPage() {
                           shareId={shareId}
                         />
                         <DiamondDivider />
+                        {closestMatchHint && (
+                          <p className="font-sans text-xs text-bloom-subtle/70 italic mt-1 mb-1">
+                            ✨ {closestMatchHint}
+                          </p>
+                        )}
                         <p
                           className="font-serif text-base text-bloom-subtle"
                           style={{ fontStyle: "italic", fontWeight: 300 }}
@@ -2744,7 +2847,7 @@ function capitalize(s: string) {
 }
 
 function GalleryPage() {
-  const { data: bouquets, isLoading } = useGetRecentBouquets(50);
+  const { data: bouquets, isLoading } = useGetGalleryBouquets(50);
   usePageMeta(
     "Bouquet Gallery — PetalNest",
     "Browse beautiful custom bouquets created by our community. Get inspired and start designing your own.",
@@ -2858,8 +2961,12 @@ function GalleryPage() {
             className="grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4"
           >
             {bouquets.map((record, idx) => {
-              const matched = matchBouquet(record.flowers, record.greenery);
-              if (!matched) return null;
+              const matchResult = matchBouquet(
+                Array.from(record.flowers),
+                Array.from(record.greenery),
+              );
+              if (!matchResult) return null;
+              const matched = matchResult.entry;
               const label = [...record.flowers, ...record.greenery]
                 .map(capitalize)
                 .join(", ");
@@ -2918,15 +3025,12 @@ function ViewPage() {
   useEffect(() => {
     if (!bouquet) return;
     setIsRendering(true);
-    const matched = matchBouquet(bouquet.flowers, bouquet.greenery);
-    if (!matched) {
-      composeDynamicBouquet(bouquet.flowers, bouquet.greenery, bouquet.message)
-        .then(setMergedImageUrl)
-        .catch(console.error)
-        .finally(() => setIsRendering(false));
+    const matchResult = matchBouquet(bouquet.flowers, bouquet.greenery);
+    if (!matchResult) {
+      setIsRendering(false);
       return;
     }
-    renderBouquetWithCard(matched.imageUrl, bouquet.message)
+    renderBouquetWithCard(matchResult.entry.imageUrl, bouquet.message)
       .then(setMergedImageUrl)
       .catch(console.error)
       .finally(() => setIsRendering(false));
@@ -3183,6 +3287,21 @@ function ViewPage() {
               </button>
             </div>
           </motion.div>
+        )}
+
+        {!isRendering && !mergedImageUrl && bouquet && (
+          <div className="flex flex-col items-center gap-4 py-16 text-center">
+            <span className="text-5xl">💐</span>
+            <p className="font-serif text-lg text-bloom-subtle italic">
+              This bouquet combination is no longer available.
+            </p>
+            <Link
+              to="/"
+              className="rounded-full bg-bloom-blush px-8 py-3 font-sans text-sm font-semibold text-white shadow-card"
+            >
+              Create Your Own Bouquet
+            </Link>
+          </div>
         )}
 
         {!isPageLoading && !isError && !mergedImageUrl && bouquet === null && (
