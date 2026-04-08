@@ -30,6 +30,7 @@ import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 import type { BouquetRecord } from "./backend.d";
 import {
+  BOUQUET_LIBRARY,
   type BouquetEntry,
   ELEGANT_FLOWERS,
   getClosestMatches,
@@ -1837,9 +1838,28 @@ function Hero({ onStart }: { onStart?: () => void }) {
 }
 
 function BuilderPage() {
-  const [currentStep, setCurrentStep] = useState(1);
-  const [selectedFlowers, setSelectedFlowers] = useState<string[]>([]);
-  const [selectedGreenery, setSelectedGreenery] = useState<string[]>([]);
+  // --- Persistent state helpers (sessionStorage backup for mobile reliability) ---
+  const readSession = <T,>(key: string, fallback: T): T => {
+    try {
+      const raw = sessionStorage.getItem(key);
+      if (raw === null) return fallback;
+      return JSON.parse(raw) as T;
+    } catch {
+      return fallback;
+    }
+  };
+
+  const [currentStep, setCurrentStep] = useState<number>(() => {
+    const s = readSession<number>("pn_step", 1);
+    // Don't restore step 5 — force regeneration to avoid stale bouquet image
+    return s === 5 ? 4 : s;
+  });
+  const [selectedFlowers, setSelectedFlowers] = useState<string[]>(() =>
+    readSession<string[]>("pn_flowers", []),
+  );
+  const [selectedGreenery, setSelectedGreenery] = useState<string[]>(() =>
+    readSession<string[]>("pn_greenery", []),
+  );
   const [message, setMessage] = useState("");
   const [to, setTo] = useState("");
   const [from, setFrom] = useState("");
@@ -1860,6 +1880,31 @@ function BuilderPage() {
 
   const { isPremium, unlock } = usePremium();
   const createBouquet = useCreateBouquet();
+
+  // Sync selections to sessionStorage so mobile doesn't lose state on remount
+  useEffect(() => {
+    try {
+      sessionStorage.setItem("pn_flowers", JSON.stringify(selectedFlowers));
+    } catch {
+      /* ignore */
+    }
+  }, [selectedFlowers]);
+
+  useEffect(() => {
+    try {
+      sessionStorage.setItem("pn_greenery", JSON.stringify(selectedGreenery));
+    } catch {
+      /* ignore */
+    }
+  }, [selectedGreenery]);
+
+  useEffect(() => {
+    try {
+      sessionStorage.setItem("pn_step", JSON.stringify(currentStep));
+    } catch {
+      /* ignore */
+    }
+  }, [currentStep]);
 
   // Step-based SEO meta tags
   const stepTitles: Record<number, string> = {
@@ -1961,6 +2006,56 @@ function BuilderPage() {
         return;
       }
 
+      // ── FINAL VALIDATION: ensure matched bouquet contains only selected flowers ──
+      const effFlowerSet = new Set(
+        effectiveFlowers.map((f) => f.toLowerCase()),
+      );
+      const matchedFlowers = matchResult.entry.flowerTags.map((f) =>
+        f.toLowerCase(),
+      );
+      const hasExtraFlowers = matchedFlowers.some((f) => !effFlowerSet.has(f));
+      if (hasExtraFlowers) {
+        console.warn(
+          "[PetalNest] Validation failed — matched entry contains extra flowers not in selection. Retrying with strict single-flower fallback.",
+          { selected: effectiveFlowers, matched: matchResult.entry.flowerTags },
+        );
+        // Force strict single-flower match: find any entry whose flowers are ALL in selection
+        const strictFallback = BOUQUET_LIBRARY.find(
+          (e) =>
+            e.flowerTags.length > 0 &&
+            e.flowerTags.every((f) => effFlowerSet.has(f.toLowerCase())),
+        );
+        if (!strictFallback) {
+          toast.error("Could not find a matching bouquet for your selection.");
+          setIsGenerating(false);
+          return;
+        }
+        // Use the strict fallback instead
+        const matched = strictFallback;
+        const hint = "Close match based on your selection";
+        setClosestMatchHint(hint);
+        setGeneratingMessage("Generating your bouquet...");
+        const canvasDataUrl = await renderBouquetWithCard(
+          matched.imageUrl,
+          encodedMessage,
+          !isPremium,
+          msgFont,
+          msgColor,
+        );
+        const backendResult = await createBouquet
+          .mutateAsync({
+            flowers: effectiveFlowers,
+            greenery: selectedGreenery,
+            message: encodedMessage,
+            imageKey: matched.key,
+          })
+          .catch(() => null);
+        setMergedImageUrl(canvasDataUrl);
+        setShareId(backendResult as string | null);
+        setNoMatch(false);
+        return;
+      }
+
       const matched = matchResult.entry;
       setClosestMatchHint(
         matchResult.isExact ? null : (matchResult.hint ?? null),
@@ -2008,6 +2103,14 @@ function BuilderPage() {
     setCurrentStep(1);
     setNoMatch(false);
     setClosestMatches([]);
+    // Clear persisted session state
+    try {
+      sessionStorage.removeItem("pn_flowers");
+      sessionStorage.removeItem("pn_greenery");
+      sessionStorage.removeItem("pn_step");
+    } catch {
+      /* ignore */
+    }
   };
 
   const handleCopyLink = async () => {
@@ -2781,8 +2884,8 @@ function BuilderPage() {
                       } else if (currentStep === 3) {
                         setCurrentStep(4);
                       } else if (currentStep === 4) {
-                        handleCreate();
-                        setCurrentStep(5);
+                        // Await so bouquet is generated before step-5 renders
+                        handleCreate().then(() => setCurrentStep(5));
                       }
                     }}
                     disabled={
